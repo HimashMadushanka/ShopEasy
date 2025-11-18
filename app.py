@@ -93,6 +93,15 @@ def logout():
     flash("You have been logged out.")
     return redirect("/")
 
+
+# ---------------------
+# ABOUT ROUTE
+# ---------------------
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
 # ---------------------
 # RUN APP
 # ---------------------
