@@ -101,6 +101,43 @@ def logout():
 def about():
     return render_template("about.html")
 
+# ---------------------
+# CATEGORY PAGE
+# ---------------------
+@app.route("/categories")
+def categories():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM categories")
+    data = cursor.fetchall()
+    conn.close()
+
+    return render_template("categories.html", categories=data)
+
+# ---------------------
+# CONTACT PAGE
+# ---------------------
+@app.route("/contact", methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        message = request.form["message"]
+
+        conn = db_connect()
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO contact_messages (name, email, message) VALUES (%s, %s, %s)",
+            (name, email, message)
+        )
+        conn.commit()
+        conn.close()
+
+        flash("Your message has been sent!")
+        return redirect("/contact")
+
+    return render_template("contact.html")
+
 
 # ---------------------
 # RUN APP

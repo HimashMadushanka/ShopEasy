@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Categories</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1 class="title">Shop by Category</h1>
+
+<div class="category-container">
+
+    {% for c in categories %}
+    <div class="category-card">
+        <img src="{{ url_for('static', filename='images/' + c.image) }}" alt="{{ c.name }}">
+        <h3>{{ c.name }}</h3>
+
+        <a class="btn" href="/products/{{ c.id }}">View Products</a>
+    </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
