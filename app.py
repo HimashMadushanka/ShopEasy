@@ -138,6 +138,117 @@ def contact():
 
     return render_template("contact.html")
 
+# ---------------------
+# PROFILE PAGE
+# ---------------------
+@app.route("/profile")
+def profile():
+    if "user" not in session:
+        flash("Please login first!")
+        return redirect("/login")
+
+    # Get logged in user's details
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE username=%s", (session["user"],))
+    user = cursor.fetchone()
+    conn.close()
+
+    return render_template("profile.html", user=user)
+
+
+# ---------------------
+# Add to Cart Route PAGE
+# ---------------------
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+    if "user" not in session:
+        flash("Please login first!")
+        return redirect("/login")
+
+    username = session["user"]
+    product_id = request.form["product_id"]
+    product_name = request.form["product_name"]
+    price = request.form["price"]
+
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    # check if item already in cart
+    cursor.execute(
+        "SELECT * FROM cart WHERE username=%s AND product_id=%s",
+        (username, product_id)
+    )
+    item = cursor.fetchone()
+
+    if item:
+        cursor.execute(
+            "UPDATE cart SET quantity = quantity + 1 WHERE username=%s AND product_id=%s",
+            (username, product_id)
+        )
+    else:
+        cursor.execute(
+            "INSERT INTO cart (username, product_id, product_name, price, quantity) VALUES (%s, %s, %s, %s, %s)",
+            (username, product_id, product_name, price, 1)
+        )
+
+    conn.commit()
+    conn.close()
+
+    flash("Item added to cart!")
+    return redirect("/cart")
+
+
+# ---------------------
+# View Cart Route PAGE
+# ---------------------
+@app.route("/cart")
+def cart():
+    if "user" not in session:
+        flash("Please login first!")
+        return redirect("/login")
+
+    username = session["user"]
+
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM cart WHERE username=%s", (username,))
+    items = cursor.fetchall()
+    conn.close()
+
+    # Calculate total price
+    total = sum(item["price"] * item["quantity"] for item in items)
+
+    return render_template("cart.html", items=items, total=total)
+
+
+# ---------------------
+# Remove Item From Cart PAGE
+# ---------------------
+@app.route("/remove/<int:id>")
+def remove_item(id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM cart WHERE id=%s", (id,))
+    conn.commit()
+    conn.close()
+
+    flash("Item removed!")
+    return redirect("/cart")
+
+# ---------------------
+# product Item  PAGE
+# ---------------------
+@app.route("/api/products")
+def api_products():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM products")
+    products = cursor.fetchall()
+    conn.close()
+    return {"products": products}  # Flask automatically returns JSON
+
+
 
 # ---------------------
 # RUN APP

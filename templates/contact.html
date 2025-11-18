@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1 class="title">Contact Us</h1>
+
+<div class="contact-container">
+
+    <form method="POST" class="contact-form">
+
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Message" required></textarea>
+
+        <button class="btn">Send Message</button>
+    </form>
+
+    <div class="contact-info">
+        <h3>Our Address</h3>
+        <p>📍 Colombo, Sri Lanka</p>
+
+        <h3>Email</h3>
+        <p>📧 support@yourshop.com</p>
+
+        <h3>Phone</h3>
+        <p>📞 +94 71 234 5678</p>
+    </div>
+
+</div>
+
+</body>
+</html>
