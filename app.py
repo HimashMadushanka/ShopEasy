@@ -236,6 +236,7 @@ def remove_item(id):
     flash("Item removed!")
     return redirect("/cart")
 
+<<<<<<< HEAD
 # ---------------------
 # PRODUCTS PAGE
 # ---------------------
@@ -254,6 +255,9 @@ def api_products():
     products = cursor.fetchall()
     conn.close()
     return jsonify(products)
+=======
+
+>>>>>>> c7cb9db984ac29bbf28fd1b335ec0a9e8d5da65a
 
 
 
