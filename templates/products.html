@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Products</title>
+    <title>All Products</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Products</h1>
-    <div class="products-container">
-        {% for product in products %}
-        <div class="product-card">
-            <img src="{{ url_for('static', filename='images/' + product['image']) }}" alt="{{ product['name'] }}">
-            <h3>{{ product['name'] }}</h3>
-            <p>{{ product['description'] }}</p>
-            <p>Price: ${{ product['price'] }}</p>
-            <button>Add to Cart</button>
-        </div>
-        {% endfor %}
-    </div>
+    <h1>All Products</h1>
+    <div id="products-container"></div>
+
+    <script>
+        // Fetch products from API
+        fetch("/api/products")
+            .then(response => response.json())
+            .then(products => {
+                const container = document.getElementById("products-container");
+                products.forEach(product => {
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+
+                    card.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" width="150">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <p>Price: $${product.price}</p>
+                        <form method="POST" action="/add_to_cart">
+                            <input type="hidden" name="product_id" value="${product.id}">
+                            <input type="hidden" name="product_name" value="${product.name}">
+                            <input type="hidden" name="price" value="${product.price}">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    `;
+
+                    container.appendChild(card);
+                });
+            });
+    </script>
 </body>
 </html>

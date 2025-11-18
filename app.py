@@ -1,5 +1,5 @@
 import mysql.connector
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, jsonify
 import bcrypt
 
 app = Flask(__name__)
@@ -237,7 +237,14 @@ def remove_item(id):
     return redirect("/cart")
 
 # ---------------------
-# product Item  PAGE
+# PRODUCTS PAGE
+# ---------------------
+@app.route("/products")
+def products_page():
+    return render_template("products.html")
+
+# ---------------------
+# API PRODUCTS
 # ---------------------
 @app.route("/api/products")
 def api_products():
@@ -246,7 +253,7 @@ def api_products():
     cursor.execute("SELECT * FROM products")
     products = cursor.fetchall()
     conn.close()
-    return {"products": products}  # Flask automatically returns JSON
+    return jsonify(products)
 
 
 
