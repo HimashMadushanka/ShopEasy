@@ -10,7 +10,6 @@ app.secret_key = "mysecretkey"
 # FIX 🔥
 app.config["UPLOAD_FOLDER"] = "static/uploads"
 
-
 # ---------------------
 # DATABASE CONNECTION
 # ---------------------
@@ -18,7 +17,7 @@ def db_connect():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",             # your MySQL username
-        password="", # your MySQL password
+        password="",             # your MySQL password
         database="ecommerce"     # your database name
     )
     return conn
@@ -96,9 +95,9 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
+    session.pop("admin", None)  # also logout admin if logged in
     flash("You have been logged out.")
     return redirect("/")
-
 
 # ---------------------
 # ABOUT ROUTE
@@ -134,11 +133,6 @@ def products_by_category(cat_id):
 
     return render_template("category_products.html", category=category, products=products)
 
-
-
-
-
-
 # ---------------------
 # CONTACT PAGE
 # ---------------------
@@ -172,7 +166,6 @@ def profile():
         flash("Please login first!")
         return redirect("/login")
 
-    # Get logged in user's details
     conn = db_connect()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM users WHERE username=%s", (session["user"],))
@@ -181,9 +174,8 @@ def profile():
 
     return render_template("profile.html", user=user)
 
-
 # ---------------------
-# Add to Cart Route PAGE
+# Add to Cart Route
 # ---------------------
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
@@ -197,7 +189,7 @@ def add_to_cart():
     price = request.form["price"]
 
     conn = db_connect()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
 
     # check if item already in cart
     cursor.execute(
@@ -223,9 +215,8 @@ def add_to_cart():
     flash("Item added to cart!")
     return redirect("/cart")
 
-
 # ---------------------
-# View Cart Route PAGE
+# View Cart Route
 # ---------------------
 @app.route("/cart")
 def cart():
@@ -241,14 +232,12 @@ def cart():
     items = cursor.fetchall()
     conn.close()
 
-    # Calculate total price
     total = sum(item["price"] * item["quantity"] for item in items)
 
     return render_template("cart.html", items=items, total=total)
 
-
 # ---------------------
-# Remove Item From Cart PAGE
+# Remove Item From Cart
 # ---------------------
 @app.route("/remove/<int:id>")
 def remove_item(id):
@@ -260,7 +249,6 @@ def remove_item(id):
 
     flash("Item removed!")
     return redirect("/cart")
-
 
 # ---------------------
 # PRODUCTS PAGE
@@ -280,6 +268,8 @@ def api_products():
     products = cursor.fetchall()
     conn.close()
     return jsonify(products)
+
+
 
 
 
