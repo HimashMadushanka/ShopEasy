@@ -79,10 +79,32 @@
 
         /* Main Content */
         .main-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
             min-height: calc(100vh - 400px);
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #764ba2;
+        }
+
+        .breadcrumb span {
+            color: #999;
         }
 
         .title {
@@ -103,27 +125,26 @@
             border-radius: 2px;
         }
 
-        .profile-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem 0;
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
         }
 
+        /* Profile Card */
         .profile-card {
             background: white;
             border-radius: 16px;
-            padding: 3rem;
+            padding: 2.5rem;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            height: fit-content;
         }
 
-        .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        .profile-pic-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
         }
 
         .profile-pic {
@@ -131,49 +152,77 @@
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 2rem;
             border: 5px solid #667eea;
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .profile-card h2 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-card p {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 2rem;
+        .upload-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .profile-card p strong {
-            color: #667eea;
+        .upload-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        }
+
+        .upload-btn input {
+            display: none;
+        }
+
+        .profile-card h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-card .user-email {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
         }
 
         .btn {
-            padding: 0.9rem 2rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            display: inline-block;
+            display: block;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            margin: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            text-align: center;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn.btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn.btn-secondary:hover {
+            background: #667eea;
+            color: white;
         }
 
         .btn.logout {
@@ -181,7 +230,170 @@
         }
 
         .btn.logout:hover {
-            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Detail Cards */
+        .detail-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header h3 {
+            font-size: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header h3 i {
+            color: #667eea;
+        }
+
+        .edit-btn {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-item label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-item .value {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .info-item input,
+        .info-item textarea {
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .info-item input:focus,
+        .info-item textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .info-item textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .cancel-btn {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #d0d0d0;
+        }
+
+
+
+        /* Success Message */
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #28a745;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Footer */
@@ -268,6 +480,12 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 968px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 font-size: 0.85rem;
@@ -278,13 +496,12 @@
                 font-size: 2rem;
             }
 
-            .profile-card {
-                padding: 2rem;
+            .info-grid {
+                grid-template-columns: 1fr;
             }
 
-            .profile-pic {
-                width: 120px;
-                height: 120px;
+            .form-actions {
+                flex-direction: column;
             }
         }
     </style>
@@ -312,18 +529,164 @@
 
     <!-- Main Content -->
     <main class="main-content">
+        <div class="breadcrumb">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <span>/</span>
+            <span>My Profile</span>
+        </div>
+
         <h1 class="title">My Profile</h1>
 
-        <div class="profile-container">
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i> Profile updated successfully!
+        </div>
+
+        <div class="profile-layout">
+            <!-- Profile Card -->
             <div class="profile-card">
-                <img src="{{ url_for('static', filename='profile.png') }}" class="profile-pic" alt="Profile Picture">
+                <div class="profile-pic-container">
+                    <img src="{{ url_for('static', filename='profile.png') }}" class="profile-pic" id="profilePic" alt="Profile Picture">
+                    <label class="upload-btn" title="Change profile picture">
+                        <i class="fas fa-camera"></i>
+                        <input type="file" accept="image/*" id="profilePicInput">
+                    </label>
+                </div>
 
-                <h2>{{ user.username }}</h2>
-                <p><strong>Email:</strong> {{ user.email }}</p>
+                <h2 id="displayUsername">{{ user.username }}</h2>
+                <p class="user-email"><i class="fas fa-envelope"></i> <span id="displayEmail">{{ user.email }}</span></p>
 
-                <div>
-                    <a href="/" class="btn">Back to Home</a>
-                    <a href="/logout" class="btn logout">Logout</a>
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <a href="/logout" class="btn logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+
+            <!-- Profile Details -->
+            <div>
+                <!-- Personal Information -->
+                <div class="detail-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user"></i> Personal Information</h3>
+                        <button class="edit-btn" onclick="toggleEdit('personal')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+
+                    <div id="personalView" class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name</label>
+                            <span class="value" id="viewName">{{ user.username }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Email Address</label>
+                            <span class="value" id="viewEmail">{{ user.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone Number</label>
+                            <span class="value" id="viewPhone">+1 (234) 567-8900</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Date of Birth</label>
+                            <span class="value" id="viewDob">January 15, 1990</span>
+                        </div>
+                    </div>
+
+                    <form id="personalForm" class="hidden">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Full Name</label>
+                                <input type="text" id="editName" value="{{ user.username }}">
+                            </div>
+                            <div class="info-item">
+                                <label>Email Address</label>
+                                <input type="email" id="editEmail" value="{{ user.email }}">
+                            </div>
+                            <div class="info-item">
+                                <label>Phone Number</label>
+                                <input type="tel" id="editPhone" value="+1 (234) 567-8900">
+                            </div>
+                            <div class="info-item">
+                                <label>Date of Birth</label>
+                                <input type="date" id="editDob" value="1990-01-15">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="save-btn" onclick="savePersonalInfo()">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <button type="button" class="cancel-btn" onclick="cancelEdit('personal')">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="detail-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-map-marker-alt"></i> Shipping Address</h3>
+                        <button class="edit-btn" onclick="toggleEdit('address')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                    </div>
+
+                    <div id="addressView" class="info-grid">
+                        <div class="info-item">
+                            <label>Street Address</label>
+                            <span class="value" id="viewStreet">123 Main Street, Apt 4B</span>
+                        </div>
+                        <div class="info-item">
+                            <label>City</label>
+                            <span class="value" id="viewCity">New York</span>
+                        </div>
+                        <div class="info-item">
+                            <label>State / Province</label>
+                            <span class="value" id="viewState">NY</span>
+                        </div>
+                        <div class="info-item">
+                            <label>ZIP / Postal Code</label>
+                            <span class="value" id="viewZip">10001</span>
+                        </div>
+                        <div class="info-item" style="grid-column: 1 / -1;">
+                            <label>Country</label>
+                            <span class="value" id="viewCountry">United States</span>
+                        </div>
+                    </div>
+
+                    <form id="addressForm" class="hidden">
+                        <div class="info-grid">
+                            <div class="info-item" style="grid-column: 1 / -1;">
+                                <label>Street Address</label>
+                                <textarea id="editStreet">123 Main Street, Apt 4B</textarea>
+                            </div>
+                            <div class="info-item">
+                                <label>City</label>
+                                <input type="text" id="editCity" value="New York">
+                            </div>
+                            <div class="info-item">
+                                <label>State / Province</label>
+                                <input type="text" id="editState" value="NY">
+                            </div>
+                            <div class="info-item">
+                                <label>ZIP / Postal Code</label>
+                                <input type="text" id="editZip" value="10001">
+                            </div>
+                            <div class="info-item">
+                                <label>Country</label>
+                                <input type="text" id="editCountry" value="United States">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="save-btn" onclick="saveAddressInfo()">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <button type="button" class="cancel-btn" onclick="cancelEdit('address')">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -368,16 +731,145 @@
             <div class="footer-section">
                 <h3>Contact Info</h3>
                 <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Street, City, Country</li>
-                    <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                    <li><i class="fas fa-map-marker-alt"></i> 23 Street, Colombo, Sri Lanka</li>
+                    <li><i class="fas fa-phone"></i> +94 234 567 8900</li>
                     <li><i class="fas fa-envelope"></i> info@shopeasy.com</li>
                 </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2024 ShopEasy. All rights reserved.</p>
+            <p>&copy; 2025 ShopEasy. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        // Profile picture upload
+        document.getElementById('profilePicInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profilePic').src = e.target.result;
+                    showSuccessMessage();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Toggle edit mode
+        function toggleEdit(section) {
+            const view = document.getElementById(section + 'View');
+            const form = document.getElementById(section + 'Form');
+            
+            view.classList.add('hidden');
+            form.classList.remove('hidden');
+        }
+
+        // Cancel edit
+        function cancelEdit(section) {
+            const view = document.getElementById(section + 'View');
+            const form = document.getElementById(section + 'Form');
+            
+            form.classList.add('hidden');
+            view.classList.remove('hidden');
+        }
+
+        // Save personal information
+        function savePersonalInfo() {
+            const name = document.getElementById('editName').value;
+            const email = document.getElementById('editEmail').value;
+            const phone = document.getElementById('editPhone').value;
+            const dob = document.getElementById('editDob').value;
+
+            // Format date
+            const dobFormatted = new Date(dob).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Update view
+            document.getElementById('viewName').textContent = name;
+            document.getElementById('viewEmail').textContent = email;
+            document.getElementById('viewPhone').textContent = phone;
+            document.getElementById('viewDob').textContent = dobFormatted;
+
+            // Update header
+            document.getElementById('displayUsername').textContent = name;
+            document.getElementById('displayEmail').textContent = email;
+
+            cancelEdit('personal');
+            showSuccessMessage();
+
+            // Here you would send the data to your backend
+            // fetch('/update-profile', { method: 'POST', body: JSON.stringify({name, email, phone, dob}) })
+        }
+
+        // Save address information
+        function saveAddressInfo() {
+            const street = document.getElementById('editStreet').value;
+            const city = document.getElementById('editCity').value;
+            const state = document.getElementById('editState').value;
+            const zip = document.getElementById('editZip').value;
+            const country = document.getElementById('editCountry').value;
+
+            // Update view
+            document.getElementById('viewStreet').textContent = street;
+            document.getElementById('viewCity').textContent = city;
+            document.getElementById('viewState').textContent = state;
+            document.getElementById('viewZip').textContent = zip;
+            document.getElementById('viewCountry').textContent = country;
+
+            cancelEdit('address');
+            showSuccessMessage();
+
+            // Here you would send the data to your backend
+            // fetch('/update-address', { method: 'POST', body: JSON.stringify({street, city, state, zip, country}) })
+        }
+
+        // Delete address
+        function deleteAddress() {
+            if (confirm('Are you sure you want to delete your shipping address?')) {
+                // Clear address fields
+                document.getElementById('viewStreet').textContent = 'Not set';
+                document.getElementById('viewCity').textContent = 'Not set';
+                document.getElementById('viewState').textContent = 'Not set';
+                document.getElementById('viewZip').textContent = 'Not set';
+                document.getElementById('viewCountry').textContent = 'Not set';
+
+                cancelEdit('address');
+                showSuccessMessage('Address deleted successfully!');
+
+                // Here you would send the delete request to your backend
+                // fetch('/delete-address', { method: 'DELETE' })
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage(message = 'Profile updated successfully!') {
+            const msg = document.getElementById('successMessage');
+            msg.textContent = message;
+            msg.classList.add('show');
+            
+            setTimeout(() => {
+                msg.classList.remove('show');
+            }, 3000);
+        }
+
+        function saveProfile() {
+            let formData = new FormData();
+            formData.append("name", document.getElementById("name").value);
+            formData.append("phone", document.getElementById("phone").value);
+
+            fetch("/update_profile", {
+               method: "POST",
+               body: formData
+         })
+         .then(resp => resp.json())
+         .then(data => alert(data.message));
+      }
+
+    </script>
 </body>
 </html>

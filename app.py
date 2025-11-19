@@ -1,9 +1,15 @@
-import mysql.connector
+import os
 from flask import Flask, render_template, request, redirect, session, flash, jsonify
+import mysql.connector
 import bcrypt
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = "mysecretkey"  # required for sessions
+app.secret_key = "mysecretkey"
+
+# FIX 🔥
+app.config["UPLOAD_FOLDER"] = "static/uploads"
+
 
 # ---------------------
 # DATABASE CONNECTION
@@ -275,8 +281,11 @@ def api_products():
     conn.close()
     return jsonify(products)
 
+
+
 # ---------------------
 # RUN APP
 # ---------------------
 if __name__ == "__main__":
+    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
     app.run(debug=True)
