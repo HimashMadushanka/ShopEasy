@@ -105,14 +105,33 @@ def about():
 # CATEGORY PAGE
 # ---------------------
 @app.route("/categories")
-def categories():
+def categories_page():
     conn = db_connect()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM categories")
-    data = cursor.fetchall()
+    categories = cursor.fetchall()
+    conn.close()
+    return render_template("categories.html", categories=categories)
+
+@app.route("/category/<int:cat_id>")
+def products_by_category(cat_id):
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT name FROM categories WHERE id=%s", (cat_id,))
+    category = cursor.fetchone()
+
+    cursor.execute("SELECT * FROM products WHERE category_id=%s", (cat_id,))
+    products = cursor.fetchall()
+
     conn.close()
 
-    return render_template("categories.html", categories=data)
+    return render_template("category_products.html", category=category, products=products)
+
+
+
+
+
 
 # ---------------------
 # CONTACT PAGE
@@ -236,7 +255,7 @@ def remove_item(id):
     flash("Item removed!")
     return redirect("/cart")
 
-<<<<<<< HEAD
+
 # ---------------------
 # PRODUCTS PAGE
 # ---------------------
@@ -255,11 +274,6 @@ def api_products():
     products = cursor.fetchall()
     conn.close()
     return jsonify(products)
-=======
-
->>>>>>> c7cb9db984ac29bbf28fd1b335ec0a9e8d5da65a
-
-
 
 # ---------------------
 # RUN APP
