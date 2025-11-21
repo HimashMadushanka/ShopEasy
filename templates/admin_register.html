@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Login</title>
+    <title>Admin Register</title>
 </head>
 <body>
-    <h2>Admin Login</h2>
+    <h2>Admin Registration</h2>
     <form method="POST">
+        <input type="text" name="username" placeholder="Username" required><br>
         <input type="email" name="email" placeholder="Email" required><br>
         <input type="password" name="password" placeholder="Password" required><br>
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
     </form>
-    <a href="/admin/register">Register</a>
+    <a href="/admin/login">Login</a>
 </body>
 </html>

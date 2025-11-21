@@ -418,7 +418,9 @@
                 <li><a href="/categories"><i class="fas fa-list"></i> Categories</a></li>
                 <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
                 <li><a href="/contact"><i class="fas fa-envelope"></i> Contact</a></li>
-                
+                {% if session.get('is_admin') %}
+                <li><a href="/admin"><i class="fas fa-cog"></i> Admin</a></li>
+                {% endif %}
                 {% if username %}
                  
                 <li><a href="/cart"><i class="fas fa-shopping-cart"></i> Cart</a></li>

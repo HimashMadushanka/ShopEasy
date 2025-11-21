@@ -4,6 +4,8 @@ import mysql.connector
 import bcrypt
 from werkzeug.utils import secure_filename
 import stripe
+from functools import wraps
+import csv
 
 app = Flask(__name__)
 app.secret_key = "mysecretkey"
@@ -12,7 +14,7 @@ app.secret_key = "mysecretkey"
 app.config["UPLOAD_FOLDER"] = "static/uploads"
 
 # Stripe keys
-stripe.api_key = "sk_test_51SVHsEFpFFIttRBhc8PBtemSSWBhd5MU9QvFd4uIGbBfjRAb2Ofd3QCAZYKJehgvm9N6GMGnz5Kl4qIvF4sF4pA800aLpUZawZ"  # Replace with your Stripe secret key
+stripe.api_key = "sk_test_51SVHsEFpFFIttRBhc8PBtemSSWBhd5MU9QvFd4uIGbBfjRAb2Ofd3QCAZYKJehgvm9N6GMGnz5Kl4qIvF4sF4pA800aLpUZawZ"
 
 # ---------------------
 # DATABASE CONNECTION
@@ -68,7 +70,7 @@ def register():
     return render_template("register.html")
 
 # ---------------------
-# LOGIN ROUTE
+# LOGIN ROUTE (UPDATED WITH ADMIN CHECK)
 # ---------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -84,6 +86,12 @@ def login():
 
         if user and bcrypt.checkpw(password, user["password"].encode("utf-8")):
             session["user"] = user["username"]
+            session["user_id"] = user["id"]
+            # Set admin session if user is admin
+            if user.get("role") == "admin":  # Use get() to avoid KeyError if role doesn't exist
+                session["is_admin"] = True
+            else:
+                session["is_admin"] = False
             flash("Login successful!")
             return redirect("/")
         else:
@@ -98,7 +106,8 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop("user", None)
-    session.pop("admin", None)
+    session.pop("user_id", None)
+    session.pop("is_admin", None)
     flash("You have been logged out.")
     return redirect("/")
 
@@ -321,6 +330,88 @@ def checkout():
 def payment_success():
     flash("Payment successful! Your order is confirmed.")
     return redirect("/")
+
+# ---------------------
+# ADMIN REGISTRATION
+# ---------------------
+@app.route("/admin/register", methods=["GET", "POST"])
+def admin_register():
+    if request.method == "POST":
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+        conn = db_connect()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("INSERT INTO admin (username, email, password) VALUES (%s, %s, %s)", 
+                           (username, email, hashed_password))
+            conn.commit()
+            flash("Admin registered successfully!", "success")
+            return redirect("/admin/login")
+        except mysql.connector.IntegrityError:
+            flash("Username or email already exists!", "danger")
+            return redirect("/admin/register")
+        finally:
+            cursor.close()
+            conn.close()
+    return render_template("admin_register.html")
+
+# ---------------------
+# ADMIN LOGIN
+# ---------------------
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = db_connect()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM admin WHERE email=%s", (email,))
+        admin = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if admin and bcrypt.checkpw(password.encode('utf-8'), admin["password"].encode('utf-8')):
+            session["admin_id"] = admin["id"]
+            session["admin_username"] = admin["username"]
+            return redirect("/admin/dashboard")
+        else:
+            flash("Invalid email or password!", "danger")
+            return redirect("/admin/login")
+    return render_template("admin_login.html")
+
+# ---------------------
+# LOGIN REQUIRED DECORATOR
+# ---------------------
+def admin_login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "admin_id" not in session:
+            flash("Login required!", "warning")
+            return redirect("/admin/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+# ---------------------
+# DASHBOARD
+# ---------------------
+@app.route("/admin/dashboard")
+@admin_login_required
+def admin_dashboard():
+    return render_template("admin_dashboard.html", username=session["admin_username"])
+
+# ---------------------
+# LOGOUT
+# ---------------------
+@app.route("/admin/logout")
+def admin_logout():
+    session.clear()
+    flash("Logged out successfully!", "success")
+    return redirect("/admin/login")
+
 
 # ---------------------
 # RUN APP
