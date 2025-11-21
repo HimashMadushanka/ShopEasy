@@ -1,0 +1,27 @@
+<h2>Orders</h2>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Total</th>
+        <th>Payment</th>
+        <th>Address</th>
+        <th>Created</th>
+        <th>Action</th>
+    </tr>
+    {% for o in orders %}
+    <tr>
+        <td>{{ o.id }}</td>
+        <td>{{ o.username }}</td>
+        <td>{{ o.total_amount }}</td>
+        <td>{{ o.payment_method }}</td>
+        <td>{{ o.shipping_address }}</td>
+        <td>{{ o.created_at }}</td>
+        <td>
+            <form action="/admin/orders/delete/{{ o.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this order?');">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

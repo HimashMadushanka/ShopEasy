@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2025 at 06:23 AM
+-- Generation Time: Nov 21, 2025 at 05:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,27 @@ SET time_zone = "+00:00";
 --
 -- Database: `ecommerce`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `username`, `email`, `password`, `created_at`) VALUES
+(1, 'himash', 'Himashmadushanka@gmail.com', '$2b$12$J/86xpJkNKX6iTbiSqHnCez6qnkW0WMBG4k9l223hZs2zeDC02ZaO', '2025-11-21 04:11:23');
 
 -- --------------------------------------------------------
 
@@ -228,20 +249,30 @@ CREATE TABLE `users` (
   `state` varchar(50) DEFAULT NULL,
   `zip` varchar(20) DEFAULT NULL,
   `country` varchar(50) DEFAULT NULL,
-  `profile_pic` varchar(255) DEFAULT 'default.png'
+  `profile_pic` varchar(255) DEFAULT 'default.png',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_admin` tinyint(1) DEFAULT 0,
+  `role` enum('user','admin') DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `phone`, `dob`, `street`, `city`, `state`, `zip`, `country`, `profile_pic`) VALUES
-(1, 'himash', 'Himashmadushanka975@gmail.com', '$2b$12$wbFhnMZ0s8DeGmsNHhx1bO79nYOT8silARvY/xdiQw7M7YVdCXDpm', '+1 (234) 567-8978', '1990-01-15', NULL, NULL, NULL, NULL, NULL, 'default.png'),
-(2, 'admin', 'admin@example.com', '$2b$12$z4k2V5lV0YZ7/0pV.QMSQOxssQ5ldxD7H9cE3JZ0YgkqXkFZ5Lp6C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `phone`, `dob`, `street`, `city`, `state`, `zip`, `country`, `profile_pic`, `created_at`, `is_admin`, `role`) VALUES
+(7, 'himash', 'Himashmadushanka975@gmail.com', '$2b$12$ZIw8N1MiqNSFE9DHaZDf0eOVs1j5S4qWiyWP5VpnibCsbaQ0Rz8/K', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', '2025-11-20 11:44:44', 0, 'user');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `cart`
@@ -288,6 +319,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
@@ -321,7 +358,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

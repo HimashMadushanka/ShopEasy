@@ -413,6 +413,171 @@ def admin_logout():
     return redirect("/admin/login")
 
 
+
+# List Products
+@app.route("/admin/products")
+@admin_login_required
+def admin_products():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT p.*, c.name AS category_name FROM products p LEFT JOIN categories c ON p.category_id=c.id")
+    products = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template("admin_products.html", products=products)
+
+# Add Product
+@app.route("/admin/products/add", methods=["GET", "POST"])
+@admin_login_required
+def admin_add_product():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM categories")
+    categories = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        price = request.form["price"]
+        description = request.form["description"]
+        category_id = request.form["category"]
+        image_file = request.files["image"]
+
+        image_filename = None
+        if image_file:
+            image_filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config["UPLOAD_FOLDER"], image_filename))
+
+        conn = db_connect()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO products (name, price, description, category_id, image) VALUES (%s,%s,%s,%s,%s)",
+                       (name, price, description, category_id, image_filename))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        flash("Product added successfully!", "success")
+        return redirect("/admin/products")
+
+    return render_template("admin_add_product.html", categories=categories)
+
+
+# List Categories
+@app.route("/admin/categories")
+@admin_login_required
+def admin_categories():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM categories")
+    categories = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template("admin_categories.html", categories=categories)
+
+# Add Category
+@app.route("/admin/categories/add", methods=["GET","POST"])
+@admin_login_required
+def admin_add_category():
+    if request.method == "POST":
+        name = request.form["name"]
+        conn = db_connect()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO categories (name) VALUES (%s)", (name,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        flash("Category added!", "success")
+        return redirect("/admin/categories")
+    return render_template("admin_add_category.html")
+
+@app.route("/admin/orders")
+@admin_login_required
+def admin_orders():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM orders ORDER BY created_at DESC")
+    orders = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template("admin_orders.html", orders=orders)
+
+@app.route("/admin/users")
+@admin_login_required
+def admin_users():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users")
+    users = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template("admin_users.html", users=users)
+
+@app.route("/admin/analytics")
+@admin_login_required
+def admin_analytics():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT COUNT(*) AS total_users FROM users")
+    total_users = cursor.fetchone()["total_users"]
+
+    cursor.execute("SELECT COUNT(*) AS total_products FROM products")
+    total_products = cursor.fetchone()["total_products"]
+
+    cursor.execute("SELECT COUNT(*) AS total_orders, SUM(total_amount) AS total_sales FROM orders")
+    stats = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+    return render_template("admin_analytics.html", total_users=total_users,
+                           total_products=total_products,
+                           total_orders=stats["total_orders"],
+                           total_sales=stats["total_sales"])
+
+
+# Delete Order
+@app.route("/admin/orders/delete/<int:order_id>", methods=["POST", "GET"])
+@admin_login_required
+def admin_delete_order(order_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    
+    # First, delete related order_items
+    cursor.execute("DELETE FROM order_items WHERE order_id=%s", (order_id,))
+    
+    # Then delete the order itself
+    cursor.execute("DELETE FROM orders WHERE id=%s", (order_id,))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash("Order deleted successfully!", "success")
+    return redirect("/admin/orders")
+
+# Delete User
+@app.route("/admin/users/delete/<int:user_id>", methods=["POST", "GET"])
+@admin_login_required
+def admin_delete_user(user_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    # Prevent admin from deleting themselves (optional)
+    cursor.execute("SELECT is_admin FROM users WHERE id=%s", (user_id,))
+    user = cursor.fetchone()
+    if user and user[0] == 1:
+        flash("Cannot delete an admin user!", "danger")
+        return redirect("/admin/users")
+
+    # Delete the user
+    cursor.execute("DELETE FROM users WHERE id=%s", (user_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash("User deleted successfully!", "success")
+    return redirect("/admin/users")
+
 # ---------------------
 # RUN APP
 # ---------------------

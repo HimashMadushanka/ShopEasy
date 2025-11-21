@@ -1,0 +1,7 @@
+<h2>Categories</h2>
+<a href="/admin/categories/add">Add Category</a>
+<ul>
+    {% for c in categories %}
+        <li>{{ c.name }} - <a href="/admin/categories/edit/{{ c.id }}">Edit</a> | <a href="/admin/categories/delete/{{ c.id }}">Delete</a></li>
+    {% endfor %}
+</ul>
