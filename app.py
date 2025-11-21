@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import stripe
 from functools import wraps
 import csv
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.secret_key = "mysecretkey"
@@ -512,6 +513,7 @@ def admin_users():
     conn.close()
     return render_template("admin_users.html", users=users)
 
+
 @app.route("/admin/analytics")
 @admin_login_required
 def admin_analytics():
@@ -533,6 +535,9 @@ def admin_analytics():
                            total_products=total_products,
                            total_orders=stats["total_orders"],
                            total_sales=stats["total_sales"])
+
+
+
 
 
 # Delete Order
