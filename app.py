@@ -514,6 +514,10 @@ def admin_users():
     return render_template("admin_users.html", users=users)
 
 
+
+
+
+
 @app.route("/admin/analytics")
 @admin_login_required
 def admin_analytics():
@@ -527,14 +531,15 @@ def admin_analytics():
     total_products = cursor.fetchone()["total_products"]
 
     cursor.execute("SELECT COUNT(*) AS total_orders, SUM(total_amount) AS total_sales FROM orders")
-    stats = cursor.fetchone()
+    order_stats = cursor.fetchone()
 
     cursor.close()
     conn.close()
     return render_template("admin_analytics.html", total_users=total_users,
-                           total_products=total_products,
-                           total_orders=stats["total_orders"],
-                           total_sales=stats["total_sales"])
+                           total_products=total_products, total_orders=order_stats["total_orders"],
+                           total_sales=order_stats["total_sales"])
+
+
 
 
 

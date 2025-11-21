@@ -1,27 +1,246 @@
-<h2>Orders</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Total</th>
-        <th>Payment</th>
-        <th>Address</th>
-        <th>Created</th>
-        <th>Action</th>
-    </tr>
-    {% for o in orders %}
-    <tr>
-        <td>{{ o.id }}</td>
-        <td>{{ o.username }}</td>
-        <td>{{ o.total_amount }}</td>
-        <td>{{ o.payment_method }}</td>
-        <td>{{ o.shipping_address }}</td>
-        <td>{{ o.created_at }}</td>
-        <td>
-            <form action="/admin/orders/delete/{{ o.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this order?');">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orders Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .orders-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h2 {
+            color: #1e293b;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+            border-radius: 2px;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 16px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            transform: scale(1.01);
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .order-id {
+            font-weight: 700;
+            color: #06b6d4;
+        }
+        
+        .username {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .total-amount {
+            font-weight: 700;
+            color: #10b981;
+            font-size: 15px;
+        }
+        
+        .payment-method {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        
+        .address {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .date {
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        form {
+            display: inline-block;
+            margin: 0;
+        }
+        
+        button {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+        
+        .empty-state p {
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .orders-container {
+                padding: 30px 20px;
+            }
+            
+            h2 {
+                font-size: 26px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 13px;
+            }
+            
+            .address {
+                max-width: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            th, td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            
+            button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="orders-container">
+        <h2>Orders</h2>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Address</th>
+                        <th>Created</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in orders %}
+                    <tr>
+                        <td class="order-id">#{{ o.id }}</td>
+                        <td class="username">{{ o.username }}</td>
+                        <td class="total-amount">${{ o.total_amount }}</td>
+                        <td><span class="payment-method">{{ o.payment_method }}</span></td>
+                        <td class="address" title="{{ o.shipping_address }}">{{ o.shipping_address }}</td>
+                        <td class="date">{{ o.created_at }}</td>
+                        <td>
+                            <form action="/admin/orders/delete/{{ o.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this order?');">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Uncomment if you want to show empty state when no orders exist -->
+        <!-- {% if not orders %}
+        <div class="empty-state">
+            <p>No orders yet</p>
+        </div>
+        {% endif %} -->
+    </div>
+</body>
+</html>

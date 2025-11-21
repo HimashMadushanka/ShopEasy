@@ -1,19 +1,273 @@
-<h2>Products</h2>
-<a href="/admin/products/add">Add Product</a>
-<table border="1">
-    <tr>
-        <th>ID</th><th>Name</th><th>Price</th><th>Category</th><th>Actions</th>
-    </tr>
-    {% for p in products %}
-    <tr>
-        <td>{{ p.id }}</td>
-        <td>{{ p.name }}</td>
-        <td>{{ p.price }}</td>
-        <td>{{ p.category_name }}</td>
-        <td>
-            <a href="/admin/products/edit/{{ p.id }}">Edit</a> |
-            <a href="/admin/products/delete/{{ p.id }}">Delete</a>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        h2 {
+            color: #1e293b;
+            font-size: 32px;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+            border-radius: 2px;
+        }
+        
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: white;
+            padding: 14px 28px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+        }
+        
+        .add-btn::before {
+            content: '+';
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 16px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            transform: scale(1.01);
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .product-id {
+            font-weight: 700;
+            color: #06b6d4;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: #10b981;
+            font-size: 15px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .actions a {
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .edit-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+        
+        .empty-state p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .products-container {
+                padding: 30px 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            h2 {
+                font-size: 26px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 13px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="products-container">
+        <div class="header">
+            <h2>Products</h2>
+            <a href="/admin/products/add" class="add-btn">Add Product</a>
+        </div>
+        
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td class="product-id">#{{ p.id }}</td>
+                        <td class="product-name">{{ p.name }}</td>
+                        <td class="product-price">${{ p.price }}</td>
+                        <td><span class="category-badge">{{ p.category_name }}</span></td>
+                        <td>
+                            <div class="actions">
+                                <a href="/admin/products/edit/{{ p.id }}" class="edit-btn">Edit</a>
+                                <a href="/admin/products/delete/{{ p.id }}" class="delete-btn">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Uncomment if you want to show empty state when no products exist -->
+        <!-- {% if not products %}
+        <div class="empty-state">
+            <p>No products yet</p>
+            <a href="/admin/products/add" class="add-btn">Add your first product</a>
+        </div>
+        {% endif %} -->
+    </div>
+</body>
+</html>
