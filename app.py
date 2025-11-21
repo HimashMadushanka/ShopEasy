@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, session, flash, jsonify,send_file
 import mysql.connector
 import bcrypt
 from werkzeug.utils import secure_filename
@@ -7,6 +7,8 @@ import stripe
 from functools import wraps
 import csv
 from datetime import datetime, timedelta
+from fpdf import FPDF
+import io
 
 app = Flask(__name__)
 app.secret_key = "mysecretkey"
@@ -518,6 +520,8 @@ def admin_users():
 
 
 
+
+
 @app.route("/admin/analytics")
 @admin_login_required
 def admin_analytics():
@@ -531,15 +535,14 @@ def admin_analytics():
     total_products = cursor.fetchone()["total_products"]
 
     cursor.execute("SELECT COUNT(*) AS total_orders, SUM(total_amount) AS total_sales FROM orders")
-    order_stats = cursor.fetchone()
+    stats = cursor.fetchone()
 
     cursor.close()
     conn.close()
     return render_template("admin_analytics.html", total_users=total_users,
-                           total_products=total_products, total_orders=order_stats["total_orders"],
-                           total_sales=order_stats["total_sales"])
-
-
+                           total_products=total_products,
+                           total_orders=stats["total_orders"],
+                           total_sales=stats["total_sales"])
 
 
 
