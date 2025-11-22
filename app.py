@@ -591,6 +591,74 @@ def admin_delete_user(user_id):
     flash("User deleted successfully!", "success")
     return redirect("/admin/users")
 
+
+
+
+
+
+
+
+
+
+@app.route("/admin/products/edit/<int:id>", methods=["GET", "POST"])
+@admin_login_required
+def admin_edit_product(id):
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    # Fetch product
+    cursor.execute("SELECT * FROM products WHERE id=%s", (id,))
+    product = cursor.fetchone()
+
+    # Fetch categories
+    cursor.execute("SELECT * FROM categories")
+    categories = cursor.fetchall()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        price = request.form["price"]
+        description = request.form["description"]
+        category_id = request.form["category"]
+
+        image_file = request.files["image"]
+        image_filename = product["image"]
+
+        # If new image uploaded
+        if image_file and image_file.filename != "":
+            image_filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config["UPLOAD_FOLDER"], image_filename))
+
+        cursor.execute("""
+            UPDATE products SET name=%s, price=%s, description=%s,
+            category_id=%s, image=%s WHERE id=%s
+        """, (name, price, description, category_id, image_filename, id))
+
+        conn.commit()
+        flash("Product updated successfully!", "success")
+        return redirect("/admin/products")
+
+    cursor.close()
+    conn.close()
+
+    return render_template("admin_edit_product.html", product=product, categories=categories)
+
+
+@app.route("/admin/products/delete/<int:id>", methods=["POST", "GET"])
+@admin_login_required
+def admin_delete_product(id):
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM products WHERE id=%s", (id,))
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    flash("Product deleted successfully!", "success")
+    return redirect("/admin/products")
+
+
 # ---------------------
 # RUN APP
 # ---------------------

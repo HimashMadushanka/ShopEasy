@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product - Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        
+        .btn-back:hover {
+            color: #06b6d4;
+            background: #f0f9ff;
+            transform: translateX(-4px);
+        }
+        
+        .btn-back::before {
+            content: '←';
+            font-size: 18px;
+        }
+        
+        h2 {
+            color: #1e293b;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+            border-radius: 2px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            font-size: 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+            color: #475569;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #06b6d4;
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .image-section {
+            margin-bottom: 25px;
+        }
+        
+        .image-section label {
+            display: block;
+            margin-bottom: 12px;
+        }
+        
+        img.preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid #e2e8f0;
+            padding: 5px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        img.preview:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .no-image {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #f1f5f9;
+            color: #64748b;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        input[type="file"] {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            border: 2px dashed #e2e8f0;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            color: #475569;
+            cursor: pointer;
+        }
+        
+        input[type="file"]:hover {
+            border-color: #06b6d4;
+            background: #f0f9ff;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h2 {
+                font-size: 26px;
+            }
+            
+            input[type="text"],
+            input[type="number"],
+            textarea,
+            select {
+                padding: 12px 14px;
+            }
+            
+            button {
+                padding: 14px 28px;
+                font-size: 15px;
+            }
+            
+            img.preview {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="/admin/products" class="btn-back">Back to Products</a>
+    <h2>Edit Product</h2>
+
+    <form action="/admin/products/edit/{{ product.id }}" method="POST" enctype="multipart/form-data">
+        
+        <label>Product Name</label>
+        <input type="text" name="name" value="{{ product.name }}" required>
+
+        <label>Price</label>
+        <input type="number" name="price" step="0.01" value="{{ product.price }}" required>
+
+        <label>Description</label>
+        <textarea name="description" required>{{ product.description }}</textarea>
+
+        <label>Category</label>
+        <select name="category" required>
+            {% for c in categories %}
+                <option value="{{ c.id }}" {% if product.category_id == c.id %}selected{% endif %}>
+                    {{ c.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <div class="image-section">
+            <label>Current Image</label>
+            {% if product.image %}
+                <img src="/static/uploads/{{ product.image }}" class="preview" alt="Product image">
+            {% else %}
+                <span class="no-image">No image uploaded</span>
+            {% endif %}
+        </div>
+
+        <label>Upload New Image (optional)</label>
+        <input type="file" name="image">
+
+        <button type="submit">Update Product</button>
+    </form>
+</div>
+
+</body>
+</html>
