@@ -69,7 +69,7 @@
         }
         
         .add-btn::before {
-            content: '+';
+        
             font-size: 20px;
             font-weight: bold;
         }
@@ -78,6 +78,13 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
         }
+
+        .btn-group {
+             display: flex;
+             gap: 20px; /* No space */
+        }
+
+
         
         ul {
             list-style: none;
@@ -191,7 +198,10 @@
     <div class="categories-container">
         <div class="header">
             <h2>Categories</h2>
-            <a href="/admin/categories/add" class="add-btn">Add Category</a>
+            <div class="btn-group">
+            <a href="/admin/categories/add" class="add-btn">+ Add Category</a>
+            <a href="/admin/dashboard" class="add-btn">Back to Dashboard</a>
+        </div>
         </div>
         
         <ul>

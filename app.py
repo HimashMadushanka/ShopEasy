@@ -658,6 +658,56 @@ def admin_delete_product(id):
     flash("Product deleted successfully!", "success")
     return redirect("/admin/products")
 
+# Edit Category
+@app.route("/admin/categories/edit/<int:id>", methods=["GET","POST"])
+@admin_login_required
+def admin_edit_category(id):
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM categories WHERE id=%s", (id,))
+    category = cursor.fetchone()
+
+    if not category:
+        flash("Category not found!", "danger")
+        return redirect("/admin/categories")
+
+    if request.method == "POST":
+        name = request.form["name"]
+        cursor.execute("UPDATE categories SET name=%s WHERE id=%s", (name, id))
+        conn.commit()
+        flash("Category updated successfully!", "success")
+        cursor.close()
+        conn.close()
+        return redirect("/admin/categories")
+
+    cursor.close()
+    conn.close()
+    return render_template("admin_edit_category.html", category=category)
+
+# Delete Category
+@app.route("/admin/categories/delete/<int:id>", methods=["POST", "GET"])
+@admin_login_required
+def admin_delete_category(id):
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    # Optional: check if products exist in this category
+    cursor.execute("SELECT COUNT(*) FROM products WHERE category_id=%s", (id,))
+    if cursor.fetchone()[0] > 0:
+        flash("Cannot delete category with products!", "danger")
+        cursor.close()
+        conn.close()
+        return redirect("/admin/categories")
+
+    cursor.execute("DELETE FROM categories WHERE id=%s", (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash("Category deleted successfully!", "success")
+    return redirect("/admin/categories")
+
 
 # ---------------------
 # RUN APP
