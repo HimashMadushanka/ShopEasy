@@ -879,16 +879,125 @@ def update_password():
 # ---------------------
 # ADMIN SEE MESSAGES
 # ---------------------
+# ---------------------
+# MARK MESSAGE AS READ
+# ---------------------
+@app.route("/admin/messages/read/<int:message_id>")
+@admin_login_required
+def mark_message_read(message_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE contact_messages SET is_read=1 WHERE id=%s", (message_id,))
+    conn.commit()
+    conn.close()
+    flash("Message marked as read!", "success")
+    return redirect("/admin/messages")
+
+# ---------------------
+# MARK MESSAGE AS UNREAD
+# ---------------------
+@app.route("/admin/messages/unread/<int:message_id>")
+@admin_login_required
+def mark_message_unread(message_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE contact_messages SET is_read=0 WHERE id=%s", (message_id,))
+    conn.commit()
+    conn.close()
+    flash("Message marked as unread!", "success")
+    return redirect("/admin/messages")
+
+# ---------------------
+# DELETE MESSAGE (SOFT DELETE)
+# ---------------------
+@app.route("/admin/messages/delete/<int:message_id>")
+@admin_login_required
+def delete_message(message_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE contact_messages SET deleted=1 WHERE id=%s", (message_id,))
+    conn.commit()
+    conn.close()
+    flash("Message deleted successfully!", "success")
+    return redirect("/admin/messages")
+
+# ---------------------
+# PERMANENTLY DELETE MESSAGE
+# ---------------------
+@app.route("/admin/messages/permanent-delete/<int:message_id>")
+@admin_login_required
+def permanent_delete_message(message_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM contact_messages WHERE id=%s", (message_id,))
+    conn.commit()
+    conn.close()
+    flash("Message permanently deleted!", "success")
+    return redirect("/admin/messages")
+
+# ---------------------
+# RESTORE DELETED MESSAGE
+# ---------------------
+@app.route("/admin/messages/restore/<int:message_id>")
+@admin_login_required
+def restore_message(message_id):
+    conn = db_connect()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE contact_messages SET deleted=0 WHERE id=%s", (message_id,))
+    conn.commit()
+    conn.close()
+    flash("Message restored!", "success")
+    return redirect("/admin/messages")
+
+# ---------------------
+# VIEW SINGLE MESSAGE
+# ---------------------
+@app.route("/admin/messages/view/<int:message_id>")
+@admin_login_required
+def view_message(message_id):
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Mark as read when viewing
+    cursor.execute("UPDATE contact_messages SET is_read=1 WHERE id=%s", (message_id,))
+    
+    cursor.execute("SELECT * FROM contact_messages WHERE id=%s", (message_id,))
+    message = cursor.fetchone()
+    conn.commit()
+    conn.close()
+    
+    if not message:
+        flash("Message not found!", "danger")
+        return redirect("/admin/messages")
+    
+    return render_template("admin_view_message.html", message=message)
+
 @app.route("/admin/messages")
 @admin_login_required
 def admin_messages():
+    show_deleted = request.args.get('show_deleted', '0') == '1'
+    
     conn = db_connect()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM contact_messages ORDER BY created_at DESC")
+    
+    if show_deleted:
+        cursor.execute("SELECT * FROM contact_messages WHERE deleted=1 ORDER BY created_at DESC")
+    else:
+        cursor.execute("SELECT * FROM contact_messages WHERE deleted=0 ORDER BY created_at DESC")
+    
     messages = cursor.fetchall()
+    
+    # Count unread messages
+    cursor.execute("SELECT COUNT(*) as unread_count FROM contact_messages WHERE is_read=0 AND deleted=0")
+    unread_count = cursor.fetchone()["unread_count"]
+    
     cursor.close()
     conn.close()
-    return render_template("admin_messages.html", messages=messages)
+    
+    return render_template("admin_messages.html", 
+                         messages=messages, 
+                         unread_count=unread_count,
+                         show_deleted=show_deleted)
 
 # ---------------------
 # RUN APP
