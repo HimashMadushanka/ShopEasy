@@ -876,7 +876,19 @@ def update_password():
     flash("Password reset successful! Please login.", "success")
     return redirect("/login")
 
-
+# ---------------------
+# ADMIN SEE MESSAGES
+# ---------------------
+@app.route("/admin/messages")
+@admin_login_required
+def admin_messages():
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM contact_messages ORDER BY created_at DESC")
+    messages = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template("admin_messages.html", messages=messages)
 
 # ---------------------
 # RUN APP

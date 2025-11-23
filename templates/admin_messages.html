@@ -1,0 +1,114 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>📨 User Messages</h1>
+    
+    {% if messages %}
+    <div class="messages-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in messages %}
+                <tr class="{% if not msg.is_read %}unread{% endif %}">
+                    <td>{{ msg.id }}</td>
+                    <td>{{ msg.name }}</td>
+                    <td>
+                        <a href="mailto:{{ msg.email }}">{{ msg.email }}</a>
+                    </td>
+                    <td class="message-content">{{ msg.message }}</td>
+                    <td>{{ msg.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {% if msg.is_read %}
+                            <span class="status-read">Read</span>
+                        {% else %}
+                            <span class="status-unread">Unread</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-messages">
+        <p>No messages yet.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.messages-table {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+tr.unread {
+    background-color: #f0f7ff;
+    font-weight: 500;
+}
+
+.message-content {
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.status-read, .status-unread {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-read {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+}
+
+.status-unread {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.no-messages {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.no-messages p {
+    color: #666;
+    font-size: 18px;
+}
+</style>
+{% endblock %}
