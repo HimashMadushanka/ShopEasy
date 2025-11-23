@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* ------- YOUR ORIGINAL CSS (UNTOUCHED) ------- */
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f8f9fa;color:#333;line-height:1.6}
 
@@ -42,7 +41,7 @@
         .profile-card h2{font-size:1.8rem;margin-bottom:.5rem}
         .profile-card .user-email{color:#666;margin-bottom:1.5rem}
 
-        .btn{padding:.8rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600;display:block;margin-bottom:.8rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;text-align:center}
+        .btn{padding:.8rem 1.5rem;border-radius:8px;text-decoration:none;font-weight:600;display:block;margin-bottom:.8rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;text-align:center;transition:.3s}
         .btn:hover{transform:translateY(-2px)}
         .btn-secondary{background:#fff;color:#667eea;border:2px solid #667eea}
         .btn-secondary:hover{background:#667eea;color:#fff}
@@ -52,16 +51,26 @@
         .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
         .card-header h3 i{color:#667eea}
 
-        .edit-btn{padding:.5rem 1rem;border:2px solid #667eea;color:#667eea;background:transparent;border-radius:6px}
+        .edit-btn{padding:.5rem 1rem;border:2px solid #667eea;color:#667eea;background:transparent;border-radius:6px;cursor:pointer;transition:.3s}
         .edit-btn:hover{background:#667eea;color:#fff}
 
         .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem}
-        .info-item label{font-size:.85rem;color:#999;margin-bottom:.3rem;text-transform:uppercase}
-        .info-item input,textarea{padding:.8rem;border:2px solid #e0e0e0;border-radius:6px}
+        .info-item label{font-size:.85rem;color:#999;margin-bottom:.3rem;text-transform:uppercase;display:block}
+        .info-item input,textarea{width:100%;padding:.8rem;border:2px solid #e0e0e0;border-radius:6px;font-family:inherit;font-size:1rem}
+        .info-item input:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+        .info-item .value{font-size:1rem;color:#333;padding:.5rem 0}
 
         .hidden{display:none}
 
         .success-message{background:#d4edda;color:#155724;padding:1rem;border-radius:8px;margin-bottom:1.5rem;border-left:4px solid #28a745;display:none}
+        .error-message{background:#f8d7da;color:#721c24;padding:1rem;border-radius:8px;margin-bottom:1.5rem;border-left:4px solid #dc3545;display:none}
+
+        .form-actions{display:flex;gap:1rem;margin-top:2rem;justify-content:flex-end}
+        .save-btn,.cancel-btn{padding:.8rem 1.5rem;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all .3s ease}
+        .save-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+        .save-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(102,126,234,.3)}
+        .cancel-btn{background:#6c757d;color:#fff}
+        .cancel-btn:hover{background:#5a6268;transform:translateY(-2px)}
 
         .footer{background:linear-gradient(135deg,#2c3e50,#34495e);color:#fff;padding:3rem 2rem;margin-top:4rem}
         .footer-content{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:3rem}
@@ -71,7 +80,6 @@
 </head>
 
 <body>
-
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
@@ -91,7 +99,6 @@
 
     <!-- Main -->
     <main class="main-content">
-
         <div class="breadcrumb">
             <a href="/"><i class="fas fa-home"></i> Home</a> <span>/</span> <span>My Profile</span>
         </div>
@@ -102,12 +109,16 @@
             <i class="fas fa-check-circle"></i> Profile updated successfully!
         </div>
 
-        <div class="profile-layout">
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+        </div>
 
+        <div class="profile-layout">
             <!-- Profile Card -->
             <div class="profile-card">
                 <div class="profile-pic-container">
-                    <img src="{{ url_for('static', filename='profile.png') }}" class="profile-pic" id="profilePic">
+                    <img src="{{ url_for('static', filename='uploads/' + (user.profile_pic if user.profile_pic else 'default.png')) }}" 
+                         class="profile-pic" id="profilePic" alt="Profile Picture">
                     <label class="upload-btn">
                         <i class="fas fa-camera"></i>
                         <input type="file" id="profilePicInput" accept="image/*">
@@ -123,7 +134,6 @@
 
             <!-- Right Section -->
             <div>
-
                 <!-- Personal Information -->
                 <div class="detail-card">
                     <div class="card-header">
@@ -132,22 +142,49 @@
                     </div>
 
                     <div id="personalView" class="info-grid">
-                        <div class="info-item"><label>Full Name</label><span class="value" id="viewName">{{ user.username }}</span></div>
-                        <div class="info-item"><label>Email</label><span class="value" id="viewEmail">{{ user.email }}</span></div>
-                        <div class="info-item"><label>Phone</label><span class="value" id="viewPhone">+1 (234) 567-8900</span></div>
-                        <div class="info-item"><label>Date of Birth</label><span class="value" id="viewDob">1990-01-15</span></div>
+                        <div class="info-item">
+                            <label>Full Name</label>
+                            <span class="value" id="viewName">{{ user.username }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Email</label>
+                            <span class="value" id="viewEmail">{{ user.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone</label>
+                            <span class="value" id="viewPhone">
+                                {% if user.phone %}{{ user.phone }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <label>Date of Birth</label>
+                            <span class="value" id="viewDob">
+                                {% if user.dob %}{{ user.dob }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
                     </div>
 
                     <form id="personalForm" class="hidden">
                         <div class="info-grid">
-                            <div class="info-item"><label>Full Name</label><input id="editName" value="{{ user.username }}"></div>
-                            <div class="info-item"><label>Email</label><input id="editEmail" value="{{ user.email }}"></div>
-                            <div class="info-item"><label>Phone</label><input id="editPhone" value="+1 (234) 567-8900"></div>
-                            <div class="info-item"><label>Date of Birth</label><input type="date" id="editDob" value="1990-01-15"></div>
+                            <div class="info-item">
+                                <label>Full Name</label>
+                                <input type="text" id="editName" value="{{ user.username }}" required>
+                            </div>
+                            <div class="info-item">
+                                <label>Email</label>
+                                <input type="email" id="editEmail" value="{{ user.email }}" required>
+                            </div>
+                            <div class="info-item">
+                                <label>Phone</label>
+                                <input type="text" id="editPhone" value="{% if user.phone %}{{ user.phone }}{% endif %}" placeholder="Enter phone number">
+                            </div>
+                            <div class="info-item">
+                                <label>Date of Birth</label>
+                                <input type="date" id="editDob" value="{% if user.dob %}{{ user.dob }}{% endif %}">
+                            </div>
                         </div>
-
                         <div class="form-actions">
-                            <button type="button" class="save-btn" onclick="savePersonalInfo()">Save</button>
+                            <button type="button" class="save-btn" onclick="savePersonalInfo()">Save Changes</button>
                             <button type="button" class="cancel-btn" onclick="cancelEdit('personal')">Cancel</button>
                         </div>
                     </form>
@@ -161,29 +198,67 @@
                     </div>
 
                     <div id="addressView" class="info-grid">
-                        <div class="info-item"><label>Street</label><span id="viewStreet">123 Main Street</span></div>
-                        <div class="info-item"><label>City</label><span id="viewCity">New York</span></div>
-                        <div class="info-item"><label>State</label><span id="viewState">NY</span></div>
-                        <div class="info-item"><label>ZIP</label><span id="viewZip">10001</span></div>
-                        <div class="info-item"><label>Country</label><span id="viewCountry">United States</span></div>
+                        <div class="info-item">
+                            <label>Street</label>
+                            <span id="viewStreet">
+                                {% if address and address.street %}{{ address.street }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <label>City</label>
+                            <span id="viewCity">
+                                {% if address and address.city %}{{ address.city }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <label>State</label>
+                            <span id="viewState">
+                                {% if address and address.state %}{{ address.state }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <label>ZIP</label>
+                            <span id="viewZip">
+                                {% if address and address.zip %}{{ address.zip }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <label>Country</label>
+                            <span id="viewCountry">
+                                {% if address and address.country %}{{ address.country }}{% else %}Not set{% endif %}
+                            </span>
+                        </div>
                     </div>
 
                     <form id="addressForm" class="hidden">
                         <div class="info-grid">
-                            <div class="info-item"><label>Street</label><textarea id="editStreet">123 Main Street</textarea></div>
-                            <div class="info-item"><label>City</label><input id="editCity" value="New York"></div>
-                            <div class="info-item"><label>State</label><input id="editState" value="NY"></div>
-                            <div class="info-item"><label>ZIP</label><input id="editZip" value="10001"></div>
-                            <div class="info-item"><label>Country</label><input id="editCountry" value="United States"></div>
+                            <div class="info-item">
+                                <label>Street</label>
+                                <textarea id="editStreet" rows="3" placeholder="Enter street address">{% if address and address.street %}{{ address.street }}{% endif %}</textarea>
+                            </div>
+                            <div class="info-item">
+                                <label>City</label>
+                                <input type="text" id="editCity" value="{% if address and address.city %}{{ address.city }}{% endif %}" placeholder="Enter city">
+                            </div>
+                            <div class="info-item">
+                                <label>State</label>
+                                <input type="text" id="editState" value="{% if address and address.state %}{{ address.state }}{% endif %}" placeholder="Enter state">
+                            </div>
+                            <div class="info-item">
+                                <label>ZIP</label>
+                                <input type="text" id="editZip" value="{% if address and address.zip %}{{ address.zip }}{% endif %}" placeholder="Enter ZIP code">
+                            </div>
+                            <div class="info-item">
+                                <label>Country</label>
+                                <input type="text" id="editCountry" value="{% if address and address.country %}{{ address.country }}{% endif %}" placeholder="Enter country">
+                            </div>
                         </div>
-
                         <div class="form-actions">
-                            <button type="button" class="save-btn" onclick="saveAddressInfo()">Save</button>
+                            <button type="button" class="save-btn" onclick="saveAddressInfo()">Save Changes</button>
                             <button type="button" class="cancel-btn" onclick="cancelEdit('address')">Cancel</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </main>
@@ -191,7 +266,6 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-
             <div class="footer-section">
                 <h3>ShopEasy</h3>
                 <p>Your trusted online shopping destination for quality products at affordable prices.</p>
@@ -202,7 +276,6 @@
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
@@ -213,7 +286,6 @@
                     <li><a href="/faq">FAQ</a></li>
                 </ul>
             </div>
-
             <div class="footer-section">
                 <h3>Customer Service</h3>
                 <ul>
@@ -223,89 +295,182 @@
                     <li><a href="#">Track Order</a></li>
                 </ul>
             </div>
-
         </div>
-
         <div class="footer-bottom">
             © 2025 ShopEasy. All rights reserved.
         </div>
     </footer>
 
-    <!-- -------------- JavaScript (FULL FUNCTIONAL) -------------- -->
+    <!-- JavaScript -->
     <script>
-       // Toggle edit forms
-function toggleEdit(section) {
-    document.getElementById(section + "View").classList.add("hidden");
-    document.getElementById(section + "Form").classList.remove("hidden");
-}
+        // Toggle edit forms
+        function toggleEdit(section) {
+            document.getElementById(section + "View").classList.add("hidden");
+            document.getElementById(section + "Form").classList.remove("hidden");
+        }
 
-function cancelEdit(section) {
-    document.getElementById(section + "Form").classList.add("hidden");
-    document.getElementById(section + "View").classList.remove("hidden");
-}
+        function cancelEdit(section) {
+            document.getElementById(section + "Form").classList.add("hidden");
+            document.getElementById(section + "View").classList.remove("hidden");
+        }
 
-// Save personal info
-function savePersonalInfo() {
-    const data = new FormData();
-    data.append("name", document.getElementById("editName").value);
-    data.append("email", document.getElementById("editEmail").value);
-    data.append("phone", document.getElementById("editPhone").value);
-    data.append("dob", document.getElementById("editDob").value);
+        // Show success message
+        function showSuccess(message) {
+            const successEl = document.getElementById("successMessage");
+            successEl.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            successEl.style.display = "block";
+            setTimeout(() => {
+                successEl.style.display = "none";
+            }, 5000);
+        }
 
-    fetch("/update_profile", { method: "POST", body: data })
-        .then(res => res.json())
-        .then(res => {
-            if(res.message){
-                document.getElementById("viewName").innerText = document.getElementById("editName").value;
-                document.getElementById("viewEmail").innerText = document.getElementById("editEmail").value;
-                document.getElementById("viewPhone").innerText = document.getElementById("editPhone").value;
-                document.getElementById("viewDob").innerText = document.getElementById("editDob").value;
-                document.getElementById("successMessage").style.display = "block";
-                cancelEdit("personal");
+        // Show error message
+        function showError(message) {
+            const errorEl = document.getElementById("errorMessage");
+            document.getElementById("errorText").textContent = message;
+            errorEl.style.display = "block";
+            setTimeout(() => {
+                errorEl.style.display = "none";
+            }, 5000);
+        }
+
+        // Save personal info
+        function savePersonalInfo() {
+            const name = document.getElementById("editName").value.trim();
+            const email = document.getElementById("editEmail").value.trim();
+            const phone = document.getElementById("editPhone").value.trim();
+            const dob = document.getElementById("editDob").value;
+
+            // Basic validation
+            if (!name || !email) {
+                showError("Name and email are required!");
+                return;
             }
-        });
-}
 
-// Save address info
-function saveAddressInfo() {
-    const data = new FormData();
-    data.append("street", document.getElementById("editStreet").value);
-    data.append("city", document.getElementById("editCity").value);
-    data.append("state", document.getElementById("editState").value);
-    data.append("zip", document.getElementById("editZip").value);
-    data.append("country", document.getElementById("editCountry").value);
+            const data = new FormData();
+            data.append("name", name);
+            data.append("email", email);
+            data.append("phone", phone);
+            data.append("dob", dob);
 
-    fetch("/update_address", { method: "POST", body: data })
-        .then(res => res.json())
-        .then(res => {
-            if(res.message){
-                document.getElementById("viewStreet").innerText = document.getElementById("editStreet").value;
-                document.getElementById("viewCity").innerText = document.getElementById("editCity").value;
-                document.getElementById("viewState").innerText = document.getElementById("editState").value;
-                document.getElementById("viewZip").innerText = document.getElementById("editZip").value;
-                document.getElementById("viewCountry").innerText = document.getElementById("editCountry").value;
-                document.getElementById("successMessage").style.display = "block";
-                cancelEdit("address");
-            }
-        });
-}
-
-// Upload profile picture
-document.getElementById("profilePicInput").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if(file){
-        document.getElementById("profilePic").src = URL.createObjectURL(file);
-        const formData = new FormData();
-        formData.append("profile_pic", file);
-
-        fetch("/upload_profile_pic", { method: "POST", body: formData })
+            fetch("/update_profile", { 
+                method: "POST", 
+                body: data 
+            })
             .then(res => res.json())
-            .then(data => console.log(data))
-            .catch(err => console.log(err));
-    }
-});
+            .then(res => {
+                if (res.message) {
+                    // Update the displayed values
+                    document.getElementById("viewName").innerText = name;
+                    document.getElementById("viewEmail").innerText = email;
+                    document.getElementById("viewPhone").innerText = phone || "Not set";
+                    document.getElementById("viewDob").innerText = dob || "Not set";
+                    
+                    // Update profile card
+                    document.getElementById("displayUsername").innerText = name;
+                    document.getElementById("displayEmail").innerText = email;
+                    
+                    showSuccess("Personal information updated successfully!");
+                    cancelEdit("personal");
+                    
+                    // If username changed, reload to update session
+                    if (name !== "{{ user.username }}") {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                } else if (res.error) {
+                    showError(res.error);
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                showError("An error occurred while saving. Please try again.");
+            });
+        }
 
+        // Save address info
+        function saveAddressInfo() {
+            const street = document.getElementById("editStreet").value.trim();
+            const city = document.getElementById("editCity").value.trim();
+            const state = document.getElementById("editState").value.trim();
+            const zip = document.getElementById("editZip").value.trim();
+            const country = document.getElementById("editCountry").value.trim();
+
+            const data = new FormData();
+            data.append("street", street);
+            data.append("city", city);
+            data.append("state", state);
+            data.append("zip", zip);
+            data.append("country", country);
+
+            fetch("/update_address", { 
+                method: "POST", 
+                body: data 
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.message) {
+                    // Update displayed values
+                    document.getElementById("viewStreet").innerText = street || "Not set";
+                    document.getElementById("viewCity").innerText = city || "Not set";
+                    document.getElementById("viewState").innerText = state || "Not set";
+                    document.getElementById("viewZip").innerText = zip || "Not set";
+                    document.getElementById("viewCountry").innerText = country || "Not set";
+                    
+                    showSuccess("Address updated successfully!");
+                    cancelEdit("address");
+                } else if (res.error) {
+                    showError(res.error);
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                showError("An error occurred while saving. Please try again.");
+            });
+        }
+
+        // Upload profile picture
+        document.getElementById("profilePicInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    showError("Please select an image file!");
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showError("Image size should be less than 5MB!");
+                    return;
+                }
+
+                // Show preview
+                document.getElementById("profilePic").src = URL.createObjectURL(file);
+                
+                // Upload to server
+                const formData = new FormData();
+                formData.append("profile_pic", file);
+
+                fetch("/upload_profile_pic", { 
+                    method: "POST", 
+                    body: formData 
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.message) {
+                        showSuccess("Profile picture updated successfully!");
+                    } else if (data.error) {
+                        showError(data.error);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    showError("Failed to upload profile picture. Please try again.");
+                });
+            }
+        });
     </script>
-
 </body>
 </html>

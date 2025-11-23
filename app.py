@@ -182,10 +182,122 @@ def profile():
 
     conn = db_connect()
     cursor = conn.cursor(dictionary=True)
+    
+    # Get user data
     cursor.execute("SELECT * FROM users WHERE username=%s", (session["user"],))
     user = cursor.fetchone()
+    
+    # Get address data
+    cursor.execute("SELECT * FROM addresses WHERE user_id=%s", (user["id"],))
+    address = cursor.fetchone()
+    
     conn.close()
-    return render_template("profile.html", user=user)
+    
+    return render_template("profile.html", user=user, address=address)
+
+@app.route("/update_profile", methods=["POST"])
+def update_profile():
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    name = request.form.get("name")
+    email = request.form.get("email")
+    phone = request.form.get("phone")
+    dob = request.form.get("dob")
+
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE users 
+        SET username=%s, email=%s, phone=%s, dob=%s 
+        WHERE id=%s
+    """, (name, email, phone, dob, session["user_id"]))
+
+    conn.commit()
+    conn.close()
+
+    # Update session username also
+    session["user"] = name  
+
+    return jsonify({"message": "Profile updated successfully!"})
+
+@app.route("/update_address", methods=["POST"])
+def update_address():
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    street = request.form.get("street")
+    city = request.form.get("city")
+    state = request.form.get("state")
+    zip_code = request.form.get("zip")
+    country = request.form.get("country")
+
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    # Insert or Update
+    cursor.execute("SELECT * FROM addresses WHERE user_id=%s", (session["user_id"],))
+    exists = cursor.fetchone()
+
+    if exists:
+        cursor.execute("""
+            UPDATE addresses 
+            SET street=%s, city=%s, state=%s, zip=%s, country=%s 
+            WHERE user_id=%s
+        """, (street, city, state, zip_code, country, session["user_id"]))
+    else:
+        cursor.execute("""
+            INSERT INTO addresses (user_id, street, city, state, zip, country)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (session["user_id"], street, city, state, zip_code, country))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Address updated successfully!"})
+
+@app.route("/upload_profile_pic", methods=["POST"])
+def upload_profile_pic():
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    if "profile_pic" not in request.files:
+        return jsonify({"error": "No file uploaded"}), 400
+
+    file = request.files["profile_pic"]
+    filename = secure_filename(file.filename)
+
+    new_filename = f"profile_{session['user_id']}.jpg"
+    file_path = os.path.join(app.config["UPLOAD_FOLDER"], new_filename)
+
+    file.save(file_path)
+
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE users SET profile_pic=%s WHERE id=%s",
+                   (new_filename, session["user_id"]))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Profile picture updated!"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # ---------------------
 # Add to Cart Route
