@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2025 at 05:16 AM
+-- Generation Time: Nov 23, 2025 at 04:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,32 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `addresses`
+--
+
+CREATE TABLE `addresses` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `street` text DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `state` varchar(100) DEFAULT NULL,
+  `zip` varchar(20) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `is_default` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `addresses`
+--
+
+INSERT INTO `addresses` (`id`, `user_id`, `street`, `city`, `state`, `zip`, `country`, `is_default`, `created_at`, `updated_at`) VALUES
+(1, 7, '123 Main Street', 'New York', 'NY', '10000', 'United States', 1, '2025-11-23 10:32:22', '2025-11-23 10:34:44');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `admin`
 --
 
@@ -32,15 +58,19 @@ CREATE TABLE `admin` (
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `username`, `email`, `password`, `created_at`) VALUES
-(1, 'himash', 'Himashmadushanka@gmail.com', '$2b$12$J/86xpJkNKX6iTbiSqHnCez6qnkW0WMBG4k9l223hZs2zeDC02ZaO', '2025-11-21 04:11:23');
+INSERT INTO `admin` (`id`, `username`, `email`, `password`, `created_at`, `reset_token`, `reset_token_expiry`) VALUES
+(1, 'himash', 'Himashmadushanka@gmail.com', '$2b$12$J/86xpJkNKX6iTbiSqHnCez6qnkW0WMBG4k9l223hZs2zeDC02ZaO', '2025-11-21 04:11:23', NULL, NULL),
+(2, 'admin', 'Himashmadushanka975@gmail.com', '$2b$12$30LfYhMPSkrRNarDI0LBteReSz0u7YEI7Jqx0NBX/sJOZbABLEUgG', '2025-11-22 14:37:26', NULL, NULL),
+(4, 'madu', 'Himas@gmail.com', '$2b$12$cPw7qfWD9VXZKRc.phjaR.4qqklzM9N9okKCJKW3kmmd8d0nDgPPa', '2025-11-23 05:19:43', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -62,7 +92,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `username`, `product_id`, `product_name`, `price`, `quantity`) VALUES
-(10, 'himash', 40, 'Adidas Hoodie', 80.00, 1);
+(10, 'himash', 40, 'Adidas Hoodie', 80.00, 1),
+(11, 'himash', 42, 'Reebok Shoes', 90.00, 1);
 
 -- --------------------------------------------------------
 
@@ -89,6 +120,30 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contact_messages`
+--
+
+CREATE TABLE `contact_messages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) DEFAULT 0,
+  `deleted` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `contact_messages`
+--
+
+INSERT INTO `contact_messages` (`id`, `name`, `email`, `message`, `created_at`, `is_read`, `deleted`) VALUES
+(1, 'Himash', 'Himashmadushanka975@gmail.com', 'gjvjkk', '2025-11-23 05:33:38', 1, 1),
+(2, '123', 'Himashmadushanka975@gmail.com', 'hello', '2025-11-23 05:34:16', 1, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `orders`
 --
 
@@ -98,17 +153,16 @@ CREATE TABLE `orders` (
   `total_amount` decimal(10,2) DEFAULT NULL,
   `payment_method` varchar(50) DEFAULT NULL,
   `shipping_address` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(50) DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `username`, `total_amount`, `payment_method`, `shipping_address`, `created_at`) VALUES
-(1, 'himash', 1190.00, 'Cash on Delivery', 'ahuug,gfhjh', '2025-11-19 20:06:32'),
-(2, 'himash', 80.00, 'Cash on Delivery', 'akuressa,matara', '2025-11-19 20:07:20'),
-(3, 'himash', 80.00, 'Cash on Delivery', 'matara', '2025-11-19 20:15:16');
+INSERT INTO `orders` (`id`, `username`, `total_amount`, `payment_method`, `shipping_address`, `created_at`, `status`) VALUES
+(1, 'himash', 1190.00, 'Cash on Delivery', 'ahuug,gfhjh', '2025-11-19 20:06:32', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -131,9 +185,7 @@ CREATE TABLE `order_items` (
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `price`, `quantity`) VALUES
 (1, 1, 42, 'Reebok Shoes', 90.00, 1),
-(2, 1, 45, 'Samsung Galaxy S23', 1100.00, 1),
-(3, 2, 40, 'Adidas Hoodie', 80.00, 1),
-(4, 3, 40, 'Adidas Hoodie', 80.00, 1);
+(2, 1, 45, 'Samsung Galaxy S23', 1100.00, 1);
 
 -- --------------------------------------------------------
 
@@ -155,15 +207,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `description`, `image`, `category_id`) VALUES
-(39, 'Nike T-Shirt', 25.00, 'Cotton sports t-shirt', 'https://via.placeholder.com/150?text=Nike+T-Shirt', 1),
-(40, 'Adidas Hoodie', 80.00, 'Warm hoodie for winter', 'https://via.placeholder.com/150?text=Adidas+Hoodie', 1),
-(41, 'Puma Shorts', 30.00, 'Lightweight running shorts', 'https://via.placeholder.com/150?text=Puma+Shorts', 1),
-(42, 'Reebok Shoes', 90.00, 'Comfortable running shoes', 'https://via.placeholder.com/150?text=Reebok+Shoes', 1),
+(42, 'Reebok Shoes', 90.00, 'Comfortable running shoes', 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQDRANDw8PDw8PDw8NDg8PDw8QDxAPFRYWGRURExUYHSggGBolGxUTITEhJSktLi4uFx8zODMtNygtLisBCgoKDg0NFQ0PFSsZFR4vKy03KystLSstKy0tLy03KzcrKy0rKy0rKy0tKy03Nzc3LSs3Nys3Ky03KzctNysrN//AABEIAQkAvgMBIgACEQEDEQH/', 1),
 (43, 'UnderArmour Cap', 20.00, 'Sports baseball cap', 'https://via.placeholder.com/150?text=UnderArmour+Cap', 1),
 (44, 'Apple iPhone 15', 1200.00, 'Latest smartphone', 'https://via.placeholder.com/150?text=iPhone+15', 2),
 (45, 'Samsung Galaxy S23', 1100.00, 'High-performance smartphone', 'https://via.placeholder.com/150?text=Galaxy+S23', 2),
 (46, 'Sony Headphones', 150.00, 'Noise-canceling headphones', 'https://via.placeholder.com/150?text=Sony+Headphones', 2),
-(47, 'Dell Laptop', 950.00, 'Powerful work laptop', 'https://via.placeholder.com/150?text=Dell+Laptop', 2),
 (48, 'Canon Camera', 800.00, 'Digital camera for photography', 'https://via.placeholder.com/150?text=Canon+Camera', 2),
 (49, 'Ray-Ban Sunglasses', 120.00, 'Stylish sunglasses', 'https://via.placeholder.com/150?text=Ray-Ban+Sunglasses', 3),
 (50, 'Fossil Watch', 180.00, 'Leather strap wristwatch', 'https://via.placeholder.com/150?text=Fossil+Watch', 3),
@@ -252,19 +300,28 @@ CREATE TABLE `users` (
   `profile_pic` varchar(255) DEFAULT 'default.png',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `is_admin` tinyint(1) DEFAULT 0,
-  `role` enum('user','admin') DEFAULT 'user'
+  `role` enum('user','admin') DEFAULT 'user',
+  `reset_token` varchar(255) DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `phone`, `dob`, `street`, `city`, `state`, `zip`, `country`, `profile_pic`, `created_at`, `is_admin`, `role`) VALUES
-(7, 'himash', 'Himashmadushanka975@gmail.com', '$2b$12$ZIw8N1MiqNSFE9DHaZDf0eOVs1j5S4qWiyWP5VpnibCsbaQ0Rz8/K', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', '2025-11-20 11:44:44', 0, 'user');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `phone`, `dob`, `street`, `city`, `state`, `zip`, `country`, `profile_pic`, `created_at`, `is_admin`, `role`, `reset_token`, `reset_token_expiry`) VALUES
+(7, 'himash', 'Himashmadushanka975@gmail.com', '$2b$12$XdL4/0UeliQqXSMHvpSW4e962VB82dfTMncayxf3fyylOUFih6JXi', '+1 (234) 567-8966', '2008-07-24', NULL, NULL, NULL, NULL, NULL, 'profile_7.jpg', '2025-11-20 11:44:44', 0, 'user', NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `addresses`
+--
+ALTER TABLE `addresses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `admin`
@@ -284,6 +341,12 @@ ALTER TABLE `cart`
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -319,22 +382,34 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `addresses`
+--
+ALTER TABLE `addresses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `contact_messages`
+--
+ALTER TABLE `contact_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -352,17 +427,23 @@ ALTER TABLE `order_items`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `addresses`
+--
+ALTER TABLE `addresses`
+  ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `order_items`
