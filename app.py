@@ -8,7 +8,10 @@ from functools import wraps
 import csv
 from datetime import datetime, timedelta
 from fpdf import FPDF
-import io
+import os
+import uuid
+from flask import session
+
 
 app = Flask(__name__)
 app.secret_key = "mysecretkey"
@@ -707,6 +710,172 @@ def admin_delete_category(id):
 
     flash("Category deleted successfully!", "success")
     return redirect("/admin/categories")
+
+# ------------------------- FORGOT PASSWORD PAGE -------------------------
+@app.route("/admin/forgot-password")
+def admin_forgot_password():
+    return render_template("admin_forgot_password.html")
+
+
+# ------------------------- SEND RESET LINK -------------------------
+@app.route("/admin/send-reset-link", methods=["POST"])
+def admin_send_reset_link():
+    email = request.form["email"]
+
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM admin WHERE email=%s", (email,))
+    admin = cursor.fetchone()
+
+    if not admin:
+        flash("Email not found!", "danger")
+        return redirect("/admin/forgot-password")
+
+    # Create token
+    token = str(uuid.uuid4())
+    expiry_time = datetime.now() + timedelta(minutes=10)
+
+    cursor.execute(
+        "UPDATE admin SET reset_token=%s, reset_token_expiry=%s WHERE email=%s",
+        (token, expiry_time, email)
+    )
+    conn.commit()
+
+    reset_link = f"http://127.0.0.1:5000/admin/reset-password/{token}"
+
+    flash(f"Reset Link (copy this): {reset_link}", "info")
+
+    return redirect("/admin/forgot-password")
+
+
+# ------------------------- RESET PASSWORD PAGE -------------------------
+@app.route("/admin/reset-password/<token>")
+def admin_reset_password(token):
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM admin WHERE reset_token=%s", (token,))
+    admin = cursor.fetchone()
+
+    if not admin:
+        return "Invalid reset link!"
+
+    # Check expiry
+    if datetime.now() > admin["reset_token_expiry"]:
+        return "Reset link expired!"
+
+    return render_template("admin_reset_password.html", token=token)
+
+
+# ------------------------- UPDATE NEW PASSWORD -------------------------
+@app.route("/admin/update-password", methods=["POST"])
+def admin_update_password():
+    token = request.form["token"]
+    new_password = request.form["password"]
+    hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM admin WHERE reset_token=%s", (token,))
+    admin = cursor.fetchone()
+
+    if not admin:
+        return "Invalid token!"
+
+    cursor.execute(
+        "UPDATE admin SET password=%s, reset_token=NULL, reset_token_expiry=NULL WHERE reset_token=%s",
+        (hashed, token)
+    )
+    conn.commit()
+
+    flash("Password updated successfully!", "success")
+    return redirect("/admin/login")
+
+# ---------------------
+# Forgot Password Page
+# ---------------------
+@app.route("/forgot-password", methods=["GET"])
+def forgot_password():
+    return render_template("forgot_password.html")
+# ---------------------
+#  Handle Email Submit
+# ---------------------
+@app.route("/forgot-password", methods=["POST"])
+def forgot_password_post():
+    email = request.form["email"]
+
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+    user = cursor.fetchone()
+
+    if not user:
+        flash("Email not found!", "danger")
+        return redirect("/forgot-password")
+
+    # Generate token + expiry
+    token = str(uuid.uuid4())
+    expiry = datetime.now() + timedelta(minutes=10)
+
+    cursor.execute(
+        "UPDATE users SET reset_token=%s, reset_token_expiry=%s WHERE email=%s",
+        (token, expiry, email)
+    )
+    conn.commit()
+
+    reset_link = f"http://127.0.0.1:5000/reset-password/{token}"
+
+    flash(f"Reset Link (copy this): {reset_link}", "info")
+    return redirect("/forgot-password")
+# ---------------------
+# Show Reset Password Page
+# ---------------------
+@app.route("/reset-password/<token>")
+def reset_password(token):
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users WHERE reset_token=%s", (token,))
+    user = cursor.fetchone()
+
+    if not user:
+        return "Invalid reset link!"
+
+    if datetime.now() > user["reset_token_expiry"]:
+        return "Reset link expired!"
+
+    return render_template("reset_password.html", token=token)
+# ---------------------
+# Update Password
+# ---------------------
+@app.route("/update-password", methods=["POST"])
+def update_password():
+    token = request.form["token"]
+    new_password = request.form["password"]
+
+    hashed = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
+
+    conn = db_connect()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users WHERE reset_token=%s", (token,))
+    user = cursor.fetchone()
+
+    if not user:
+        return "Invalid or expired token!"
+
+    cursor.execute(
+        "UPDATE users SET password=%s, reset_token=NULL, reset_token_expiry=NULL WHERE reset_token=%s",
+        (hashed, token)
+    )
+    conn.commit()
+
+    flash("Password reset successful! Please login.", "success")
+    return redirect("/login")
+
 
 
 # ---------------------
