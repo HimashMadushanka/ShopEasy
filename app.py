@@ -8,7 +8,6 @@ from functools import wraps
 import csv
 from datetime import datetime, timedelta
 from fpdf import FPDF
-import os
 import uuid
 from flask import session
 
@@ -93,8 +92,7 @@ def login():
         if user and bcrypt.checkpw(password, user["password"].encode("utf-8")):
             session["user"] = user["username"]
             session["user_id"] = user["id"]
-            # Set admin session if user is admin
-            if user.get("role") == "admin":  # Use get() to avoid KeyError if role doesn't exist
+            if user.get("role") == "admin": 
                 session["is_admin"] = True
             else:
                 session["is_admin"] = False
@@ -283,21 +281,6 @@ def upload_profile_pic():
     conn.close()
 
     return jsonify({"message": "Profile picture updated!"})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # ---------------------
 # Add to Cart Route
@@ -630,13 +613,6 @@ def admin_users():
     conn.close()
     return render_template("admin_users.html", users=users)
 
-
-
-
-
-
-
-
 @app.route("/admin/analytics")
 @admin_login_required
 def admin_analytics():
@@ -658,10 +634,6 @@ def admin_analytics():
                            total_products=total_products,
                            total_orders=stats["total_orders"],
                            total_sales=stats["total_sales"])
-
-
-
-
 
 # Delete Order
 @app.route("/admin/orders/delete/<int:order_id>", methods=["POST", "GET"])
@@ -705,14 +677,6 @@ def admin_delete_user(user_id):
 
     flash("User deleted successfully!", "success")
     return redirect("/admin/users")
-
-
-
-
-
-
-
-
 
 
 @app.route("/admin/products/edit/<int:id>", methods=["GET", "POST"])
@@ -988,9 +952,6 @@ def update_password():
     flash("Password reset successful! Please login.", "success")
     return redirect("/login")
 
-# ---------------------
-# ADMIN SEE MESSAGES
-# ---------------------
 # ---------------------
 # MARK MESSAGE AS READ
 # ---------------------
