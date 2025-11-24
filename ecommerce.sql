@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2025 at 04:03 PM
+-- Generation Time: Nov 24, 2025 at 07:19 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -93,7 +93,8 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`id`, `username`, `product_id`, `product_name`, `price`, `quantity`) VALUES
 (10, 'himash', 40, 'Adidas Hoodie', 80.00, 1),
-(11, 'himash', 42, 'Reebok Shoes', 90.00, 1);
+(11, 'himash', 42, 'Reebok Shoes', 90.00, 1),
+(12, 'himash', 43, 'UnderArmour Cap', 20.00, 1);
 
 -- --------------------------------------------------------
 
@@ -207,77 +208,74 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `description`, `image`, `category_id`) VALUES
-(42, 'Reebok Shoes', 90.00, 'Comfortable running shoes', 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQDRANDw8PDw8PDw8NDg8PDw8QDxAPFRYWGRURExUYHSggGBolGxUTITEhJSktLi4uFx8zODMtNygtLisBCgoKDg0NFQ0PFSsZFR4vKy03KystLSstKy0tLy03KzcrKy0rKy0rKy0tKy03Nzc3LSs3Nys3Ky03KzctNysrN//AABEIAQkAvgMBIgACEQEDEQH/', 1),
-(43, 'UnderArmour Cap', 20.00, 'Sports baseball cap', 'https://via.placeholder.com/150?text=UnderArmour+Cap', 1),
-(44, 'Apple iPhone 15', 1200.00, 'Latest smartphone', 'https://via.placeholder.com/150?text=iPhone+15', 2),
-(45, 'Samsung Galaxy S23', 1100.00, 'High-performance smartphone', 'https://via.placeholder.com/150?text=Galaxy+S23', 2),
-(46, 'Sony Headphones', 150.00, 'Noise-canceling headphones', 'https://via.placeholder.com/150?text=Sony+Headphones', 2),
-(48, 'Canon Camera', 800.00, 'Digital camera for photography', 'https://via.placeholder.com/150?text=Canon+Camera', 2),
-(49, 'Ray-Ban Sunglasses', 120.00, 'Stylish sunglasses', 'https://via.placeholder.com/150?text=Ray-Ban+Sunglasses', 3),
-(50, 'Fossil Watch', 180.00, 'Leather strap wristwatch', 'https://via.placeholder.com/150?text=Fossil+Watch', 3),
-(51, 'Coach Handbag', 250.00, 'Designer handbag', 'https://via.placeholder.com/150?text=Coach+Handbag', 3),
-(52, 'Nike Sports Bag', 60.00, 'Gym backpack', 'https://via.placeholder.com/150?text=Nike+Sports+Bag', 3),
-(53, 'Apple AirPods', 200.00, 'Wireless earphones', 'https://via.placeholder.com/150?text=AirPods', 3),
-(54, 'Instant Pot', 120.00, 'Electric pressure cooker', 'https://via.placeholder.com/150?text=Instant+Pot', 4),
-(55, 'Dyson Vacuum', 350.00, 'High-efficiency vacuum cleaner', 'https://via.placeholder.com/150?text=Dyson+Vacuum', 4),
-(56, 'KitchenAid Mixer', 400.00, 'Stand mixer for baking', 'https://via.placeholder.com/150?text=KitchenAid+Mixer', 4),
-(57, 'Philips Toaster', 50.00, '2-slice toaster', 'https://via.placeholder.com/150?text=Philips+Toaster', 4),
-(58, 'Ninja Blender', 80.00, 'High-speed blender', 'https://via.placeholder.com/150?text=Ninja+Blender', 4),
-(59, 'Treadmill', 600.00, 'Home fitness treadmill', 'https://via.placeholder.com/150?text=Treadmill', 5),
-(60, 'Dumbbell Set', 100.00, 'Adjustable dumbbells', 'https://via.placeholder.com/150?text=Dumbbells', 5),
-(61, 'Yoga Mat', 35.00, 'Non-slip exercise mat', 'https://via.placeholder.com/150?text=Yoga+Mat', 5),
-(62, 'Exercise Bike', 450.00, 'Stationary bike for home', 'https://via.placeholder.com/150?text=Exercise+Bike', 5),
-(63, 'Jump Rope', 15.00, 'Speed skipping rope', 'https://via.placeholder.com/150?text=Jump+Rope', 5),
-(64, 'Nike Socks', 12.00, 'Cotton ankle socks', 'https://via.placeholder.com/150?text=Nike+Socks', 1),
-(65, 'Adidas Cap', 18.00, 'Baseball cap', 'https://via.placeholder.com/150?text=Adidas+Cap', 1),
-(66, 'Puma Jacket', 85.00, 'Sports jacket', 'https://via.placeholder.com/150?text=Puma+Jacket', 1),
-(67, 'Reebok Hoodie', 75.00, 'Warm hoodie', 'https://via.placeholder.com/150?text=Reebok+Hoodie', 1),
-(68, 'UnderArmour Shorts', 28.00, 'Running shorts', 'https://via.placeholder.com/150?text=UnderArmour+Shorts', 1),
-(69, 'Samsung TV 55\"', 700.00, 'LED Smart TV', 'https://via.placeholder.com/150?text=Samsung+TV', 2),
-(70, 'LG Monitor', 250.00, '4K computer monitor', 'https://via.placeholder.com/150?text=LG+Monitor', 2),
-(71, 'Bose Speakers', 300.00, 'Wireless Bluetooth speakers', 'https://via.placeholder.com/150?text=Bose+Speakers', 2),
-(72, 'HP Printer', 150.00, 'All-in-one printer', 'https://via.placeholder.com/150?text=HP+Printer', 2),
-(73, 'GoPro Hero 12', 450.00, 'Action camera', 'https://via.placeholder.com/150?text=GoPro+Hero+12', 2),
-(74, 'Gucci Wallet', 200.00, 'Leather wallet', 'https://via.placeholder.com/150?text=Gucci+Wallet', 3),
-(75, 'Michael Kors Bag', 230.00, 'Designer handbag', 'https://via.placeholder.com/150?text=Michael+Kors+Bag', 3),
-(76, 'Apple Watch', 350.00, 'Smartwatch with fitness tracking', 'https://via.placeholder.com/150?text=Apple+Watch', 3),
-(77, 'Fitbit Versa', 180.00, 'Smart fitness watch', 'https://via.placeholder.com/150?text=Fitbit+Versa', 3),
-(78, 'Herschel Backpack', 90.00, 'Travel backpack', 'https://via.placeholder.com/150?text=Herschel+Backpack', 3),
-(79, 'Cuisinart Coffee Maker', 120.00, 'Automatic coffee machine', 'https://via.placeholder.com/150?text=Cuisinart+Coffee+Maker', 4),
-(80, 'Breville Kettle', 60.00, 'Electric kettle', 'https://via.placeholder.com/150?text=Breville+Kettle', 4),
-(81, 'Samsung Microwave', 150.00, 'Convection microwave', 'https://via.placeholder.com/150?text=Samsung+Microwave', 4),
-(82, 'Instant Pot Duo', 130.00, 'Multi-function pressure cooker', 'https://via.placeholder.com/150?text=Instant+Pot+Duo', 4),
-(83, 'Vitamix Blender', 400.00, 'High-power blender', 'https://via.placeholder.com/150?text=Vitamix+Blender', 4),
-(84, 'Bowflex Weights', 600.00, 'Adjustable home gym set', 'https://via.placeholder.com/150?text=Bowflex+Weights', 5),
-(85, 'Kettlebell Set', 90.00, 'Cast iron kettlebells', 'https://via.placeholder.com/150?text=Kettlebells', 5),
-(86, 'Resistance Bands', 25.00, 'Fitness resistance bands', 'https://via.placeholder.com/150?text=Resistance+Bands', 5),
-(87, 'Medicine Ball', 30.00, 'Weighted ball for workouts', 'https://via.placeholder.com/150?text=Medicine+Ball', 5),
-(88, 'Pull-Up Bar', 45.00, 'Doorway pull-up bar', 'https://via.placeholder.com/150?text=Pull-Up+Bar', 5),
-(89, 'Nike Shorts', 27.00, 'Casual sports shorts', 'https://via.placeholder.com/150?text=Nike+Shorts', 1),
-(90, 'Adidas T-Shirt', 22.00, 'Short sleeve sports t-shirt', 'https://via.placeholder.com/150?text=Adidas+T-Shirt', 1),
-(91, 'Puma Cap', 17.00, 'Baseball cap', 'https://via.placeholder.com/150?text=Puma+Cap', 1),
-(92, 'Reebok Shoes', 88.00, 'Comfortable running shoes', 'https://via.placeholder.com/150?text=Reebok+Shoes2', 1),
-(93, 'UnderArmour Hoodie', 78.00, 'Sports hoodie', 'https://via.placeholder.com/150?text=UnderArmour+Hoodie2', 1),
-(94, 'Apple MacBook', 1500.00, 'Laptop for professionals', 'https://via.placeholder.com/150?text=MacBook', 2),
-(95, 'Dell XPS', 1200.00, 'High performance laptop', 'https://via.placeholder.com/150?text=Dell+XPS', 2),
-(96, 'Samsung Galaxy Tab', 600.00, 'Tablet device', 'https://via.placeholder.com/150?text=Galaxy+Tab', 2),
-(97, 'Sony PlayStation 5', 500.00, 'Game console', 'https://via.placeholder.com/150?text=PS5', 2),
-(98, 'Nintendo Switch', 400.00, 'Portable game console', 'https://via.placeholder.com/150?text=Switch', 2),
-(99, 'Ray-Ban Glasses', 125.00, 'Stylish eyewear', 'https://via.placeholder.com/150?text=Ray-Ban+Glasses', 3),
-(100, 'Fossil Watch', 175.00, 'Leather strap watch', 'https://via.placeholder.com/150?text=Fossil+Watch2', 3),
-(101, 'Coach Wallet', 180.00, 'Designer wallet', 'https://via.placeholder.com/150?text=Coach+Wallet2', 3),
-(102, 'Adidas Bag', 65.00, 'Sports backpack', 'https://via.placeholder.com/150?text=Adidas+Bag', 3),
-(103, 'Nike Socks', 14.00, 'Cotton socks', 'https://via.placeholder.com/150?text=Nike+Socks2', 3),
-(104, 'KitchenAid Mixer', 400.00, 'Stand mixer for baking', 'https://via.placeholder.com/150?text=KitchenAid+Mixer2', 4),
-(105, 'Philips Blender', 85.00, 'High-speed blender', 'https://via.placeholder.com/150?text=Philips+Blender', 4),
-(106, 'Dyson Hair Dryer', 300.00, 'Powerful hair dryer', 'https://via.placeholder.com/150?text=Dyson+Hair+Dryer', 4),
-(107, 'Instant Pot Duo', 140.00, 'Multi-function pressure cooker', 'https://via.placeholder.com/150?text=Instant+Pot+Duo2', 4),
-(108, 'Breville Coffee Maker', 120.00, 'Automatic coffee machine', 'https://via.placeholder.com/150?text=Breville+Coffee+Maker', 4),
-(109, 'Treadmill Pro', 650.00, 'Home fitness treadmill', 'https://via.placeholder.com/150?text=Treadmill+Pro', 5),
-(110, 'Exercise Bike', 450.00, 'Stationary bike for home', 'https://via.placeholder.com/150?text=Exercise+Bike2', 5),
-(111, 'Dumbbell Set', 110.00, 'Adjustable dumbbells', 'https://via.placeholder.com/150?text=Dumbbells+Set', 5),
-(112, 'Yoga Mat', 38.00, 'Non-slip exercise mat', 'https://via.placeholder.com/150?text=Yoga+Mat2', 5),
-(113, 'Jump Rope', 16.00, 'Speed skipping rope', 'https://via.placeholder.com/150?text=Jump+Rope2', 5);
+(42, 'Reebok Shoes', 90.00, 'Comfortable running shoes', '/static/images/Reebok_Shoe.jpeg', 1),
+(43, 'UnderArmour Cap', 20.00, 'Sports baseball cap', '/static/images/UnderArmour_Cap.jpeg', 1),
+(44, 'Apple iPhone 15', 1200.00, 'Latest smartphone', '/static/images/Apple_iPhone15.jpeg', 2),
+(45, 'Samsung Galaxy S23', 1100.00, 'High-performance smartphone', '/static/images/SamsungGalaxyS23.jpeg', 2),
+(46, 'Sony Headphones', 150.00, 'Noise-canceling headphones', '/static/images/Sony_Headphones.jpeg', 2),
+(48, 'Canon Camera', 800.00, 'Digital camera for photography', '/static/images/Canon_Camera.jpeg', 2),
+(49, 'Ray-Ban Sunglasses', 120.00, 'Stylish sunglasses', '/static/images/Ray_Ban_Glasses.jpeg', 3),
+(50, 'Fossil Watch', 180.00, 'Leather strap wristwatch', '/static/images/Fossil_Watch.jpeg', 3),
+(51, 'Coach Handbag', 250.00, 'Designer handbag', '/static/images/Coach_Handbag.jpeg\r\n', 3),
+(52, 'Nike Sports Bag', 60.00, 'Gym backpack', '/static/images/Nike_Sports_Bag.jpeg', 3),
+(53, 'Apple AirPods', 200.00, 'Wireless earphones', '/static/images/Apple_AirPods.jpeg', 3),
+(54, 'Instant Pot', 120.00, 'Electric pressure cooker', '/static/images/Instant_Pot.jpeg', 4),
+(55, 'Dyson Vacuum', 350.00, 'High-efficiency vacuum cleaner', '/static/images/\r\nDyson_Vacuum.jpeg\r\n', 4),
+(56, 'KitchenAid Mixer', 400.00, 'Stand mixer for baking', '/static/images/\r\nKitchenAid_Mixer.jpeg', 4),
+(57, 'Philips Toaster', 50.00, '2-slice toaster', '/static/images/\r\nPhilips_Toaster.jpeg', 4),
+(58, 'Ninja Blender', 80.00, 'High-speed blender', '/static/images/\r\nNinja_Blender.jpeg', 4),
+(59, 'Treadmill', 600.00, 'Home fitness treadmill', '/static/images/\r\nTreadmill.jpeg', 5),
+(60, 'Dumbbell Set', 100.00, 'Adjustable dumbbells', '/static/images/\r\nDumbbell_Sets.jpeg\r\n', 5),
+(61, 'Yoga Mat', 35.00, 'Non-slip exercise mat', '/static/images/\r\nYoga_Mat.jpeg', 5),
+(63, 'Jump Rope', 15.00, 'Speed skipping rope', '/static/images/\r\nJump_Rope.jpeg', 5),
+(64, 'Nike Socks', 12.00, 'Cotton ankle socks', '/static/images/\r\nNike_Sockss.jpeg', 1),
+(65, 'Adidas Cap', 18.00, 'Baseball cap', '/static/images/\r\nAdidas_Cap.jpeg', 1),
+(66, 'Puma Jacket', 85.00, 'Sports jacket', '/static/images/\r\nPuma_jacket.jpeg', 1),
+(67, 'Reebok Hoodie', 75.00, 'Warm hoodie', '/static/images/\r\nReebok_Hoodie.jpeg', 1),
+(68, 'UnderArmour Shorts', 28.00, 'Running shorts', '/static/images/\r\nUnderArmour_Shorts.jpeg', 1),
+(69, 'Samsung TV 55\"', 700.00, 'LED Smart TV', '/static/images/\r\nSamsung_TV.jpeg', 2),
+(70, 'LG Monitor', 250.00, '4K computer monitor', '/static/images/\r\nLG_Monitor.jpeg', 2),
+(71, 'Bose Speakers', 300.00, 'Wireless Bluetooth speakers', '/static/images/\r\nBose_Speakers.jpeg', 2),
+(72, 'HP Printer', 150.00, 'All-in-one printer', '/static/images/\r\nHP_Printer.jpeg', 2),
+(73, 'GoPro Hero 12', 450.00, 'Action camera', '/static/images/\r\nGoPro_Hero12.jpeg', 2),
+(74, 'Gucci Wallet', 200.00, 'Leather wallet', '/static/images/\r\nGucci_Wallets.jpeg', 3),
+(75, 'Michael Kors Bag', 230.00, 'Designer handbag', '/static/images/\r\nMichael_Kors_Bag.jpeg', 3),
+(76, 'Apple Watch', 350.00, 'Fitbit_Versa.jpeg', '/static/images/\r\nApple_Watches.jpeg', 3),
+(77, 'Fitbit Versa', 180.00, 'Smart fitness watch', '/static/images/\r\nApple_Watch.jpeg', 3),
+(78, 'Herschel Backpack', 90.00, 'Travel backpack', '/static/images/\r\nHerschel_Backpack.jpeg', 3),
+(79, 'Automatic coffee machine', 120.00, 'Automatic coffee machine', '/static/images/\r\nBreville_Coffee_Maker.jpeg', 4),
+(80, 'Breville Kettle', 60.00, 'Electric kettle', '/static/images/\r\nBreville_Kettle.jpeg', 4),
+(81, 'Samsung Microwave', 150.00, 'Convection microwave', '/static/images/\r\nSamsung_Microwave.jpeg', 4),
+(82, 'Instant Pot Duo', 130.00, 'Multi-function pressure cooker', '/static/images/\r\nInstant.jpeg', 4),
+(83, 'Vitamix Blender', 400.00, 'High-power blender', '/static/images/\r\nVitamix_Blender.jpeg', 4),
+(84, 'Bowflex Weights', 600.00, 'Adjustable home gym set', '/static/images/\r\nBowflex_Weights.jpeg', 5),
+(85, 'Kettlebell Set', 90.00, 'Cast iron kettlebells', '/static/images/\r\nKettlebell_Set.jpeg', 5),
+(86, 'Resistance Bands', 25.00, 'Fitness resistance bands', '/static/images/\r\nResistance_Bands.jpeg', 5),
+(87, 'Medicine Ball', 30.00, 'Weighted ball for workouts', '/static/images/\r\nMedicine_Ball.jpeg', 5),
+(88, 'Pull-Up Bar', 45.00, 'Doorway pull-up bar', '/static/images/\r\nPull_Up_Bar.jpeg', 5),
+(89, 'Nike Shorts', 27.00, 'Casual sports shorts', '/static/images/\r\nNike_Shorts.jpeg', 1),
+(90, 'Adidas T-Shirt', 22.00, 'Short sleeve sports t-shirt', '/static/images/\r\nAdidas_T_Shirt.jpeg', 1),
+(91, 'Puma Cap', 17.00, 'Baseball cap', '/static/images/\r\nPuma_Cap.jpeg', 1),
+(92, 'Reebok Shoes', 88.00, 'Comfortable running shoes', '/static/images/\r\nReebok_Shoes.jpeg', 1),
+(93, 'UnderArmour Hoodie', 78.00, 'Sports hoodie', '/static/images/\r\nSports_hoodie.jpeg', 1),
+(94, 'Apple MacBook', 1500.00, 'Laptop for professionals', '/static/images/\r\nApple_MacBook.jpeg', 2),
+(95, 'Dell XPS', 1200.00, 'High performance laptop', '/static/images/\r\nDell_XPS.jpeg', 2),
+(96, 'Samsung Galaxy Tab', 600.00, 'Tablet device', '/static/images/\r\nSamsung_Galaxy_Tab.jpeg', 2),
+(97, 'Sony PlayStation 5', 500.00, 'Game console', '/static/images/\r\nSony_PlayStation.jpeg', 2),
+(98, 'Nintendo Switch', 400.00, 'Portable game console', '/static/images/\r\nNintendo_Switch.jpeg', 2),
+(99, 'Ray-Ban Glasses', 125.00, 'Stylish eyewear', '/static/images/\r\nSunglasses.jpeg', 3),
+(100, 'Fossil Watch', 175.00, 'Leather strap watch', '/static/images/\r\nFossil_Watches.jpeg', 3),
+(101, 'Coach Wallet', 180.00, 'Designer wallet', '/static/images/\r\nGucci_Wallet.jpeg', 3),
+(102, 'Adidas Bag', 65.00, 'Sports backpack', '/static/images/Adidas_Bag.jpeg', 3),
+(103, 'Nike Socks', 14.00, 'Cotton socks', '/static/images/Nike_Socks.jpeg', 3),
+(104, 'KitchenAid Mixer', 400.00, 'Stand mixer for baking', '/static/images/KitchenAid_Mixere.jpeg', 4),
+(105, 'Philips Blender', 85.00, 'High-speed blender', '/static/images/Philips_Blenders.jpeg', 4),
+(106, 'Dyson Hair Dryer', 300.00, 'Powerful hair dryer', '/static/images/Dyson_Hair_Dryer.jpeg', 4),
+(108, 'Breville Coffee Maker', 120.00, 'Automatic coffee machine', '/static/images/Cuisinart.jpeg', 4),
+(109, 'Treadmill Pro', 650.00, 'Home fitness treadmill', '/static/images/Treadmill_Pro.jpeg', 5),
+(111, 'Dumbbell Set', 110.00, 'Adjustable dumbbells', '/static/images/Dumbbell_Set.jpeg', 5),
+(112, 'Yoga Mat', 38.00, 'Non-slip exercise mat', '/static/images/Yoga_Mats.jpeg', 5),
+(113, 'Jump Rope', 16.00, 'Speed skipping rope', '/static/images/Jump_Ropes.jpeg', 5);
 
 -- --------------------------------------------------------
 
@@ -397,7 +395,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `categories`
