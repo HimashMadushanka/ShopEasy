@@ -222,18 +222,6 @@
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .btn-secondary {
-            background-color: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background-color: #667eea;
-            color: white;
-            transform: translateY(-3px);
-        }
-
         .logout {
             background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: white;
@@ -593,7 +581,7 @@
                 <h2 id="displayUsername">{{ user.username }}</h2>
                 <p class="user-email"><i class="fas fa-envelope"></i> <span id="displayEmail">{{ user.email }}</span></p>
 
-                <a href="/" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                
                 <a href="/logout" class="btn logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
 
