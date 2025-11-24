@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - ShopEasy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #304abd 0%, #5f3689 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn:active {
+            transform: translateY(0);
+        }
+
+        .policy-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .toc {
+            background: #f9f9f9;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .toc h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .toc ul {
+            list-style-type: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .toc li {
+            margin-bottom: 5px;
+        }
+
+        .toc a {
+            display: block;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .policy-content {
+            padding: 30px;
+        }
+
+        .policy-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .policy-section:last-child {
+            border-bottom: none;
+        }
+
+        .policy-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .policy-section h3 {
+            color: #764ba2;
+            margin: 20px 0 10px;
+        }
+
+        .policy-section p {
+            margin-bottom: 15px;
+        }
+
+        .policy-section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .policy-section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .contact-info {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .contact-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .consent-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .consent-option {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .consent-option h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-top: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .policy-content {
+                padding: 20px;
+            }
+            
+            .toc ul {
+                flex-direction: column;
+            }
+            
+            .consent-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Privacy Policy</h1>
+            <p >Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+        </div>
+        
+        <div class="policy-container">
+            <div class="toc">
+                <h3>Table of Contents</h3>
+                <ul>
+                    <li><a href="#information-collection">Information We Collect</a></li>
+                    <li><a href="#information-use">How We Use Information</a></li>
+                    <li><a href="#information-sharing">Information Sharing</a></li>
+                    <li><a href="#cookies">Cookies & Tracking</a></li>
+                    <li><a href="#data-security">Data Security</a></li>
+                    <li><a href="#user-rights">Your Rights</a></li>
+                    <li><a href="#children-privacy">Children's Privacy</a></li>
+                    <li><a href="#policy-changes">Policy Changes</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="policy-content">
+                <div class="policy-section" id="information-collection">
+                    <h2>1. Information We Collect</h2>
+                    <p>We collect information to provide better services to our users. The types of information we collect include:</p>
+                    
+                    <h3>Personal Information</h3>
+                    <ul>
+                        <li><strong>Account Information:</strong> Name, email address, phone number, and password when you create an account.</li>
+                        <li><strong>Profile Information:</strong> Shipping address, billing address, and payment information.</li>
+                        <li><strong>Communication:</strong> Records of your communications with us, including customer support requests.</li>
+                    </ul>
+                    
+                    <h3>Non-Personal Information</h3>
+                    <ul>
+                        <li><strong>Usage Data:</strong> Information about how you interact with our website, products, and services.</li>
+                        <li><strong>Device Information:</strong> IP address, browser type, operating system, and device identifiers.</li>
+                        <li><strong>Cookies and Tracking:</strong> Information collected through cookies and similar technologies.</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>Note:</strong> We do not collect sensitive personal information such as race, religion, or political opinions unless voluntarily provided by you.</p>
+                    </div>
+                </div>
+                
+                <div class="policy-section" id="information-use">
+                    <h2>2. How We Use Your Information</h2>
+                    <p>We use the information we collect for various purposes, including:</p>
+                    
+                    <ul>
+                        <li>Providing, maintaining, and improving our services</li>
+                        <li>Processing transactions and sending related information</li>
+                        <li>Personalizing your shopping experience</li>
+                        <li>Responding to your comments, questions, and requests</li>
+                        <li>Sending promotional communications, with your consent</li>
+                        <li>Monitoring and analyzing trends, usage, and activities</li>
+                        <li>Detecting, preventing, and addressing technical issues</li>
+                        <li>Complying with legal obligations</li>
+                    </ul>
+                    
+         
+                </div>
+                
+                <div class="policy-section" id="information-sharing">
+                    <h2>3. Information Sharing and Disclosure</h2>
+                    <p>We do not sell your personal information to third parties. We may share your information in the following circumstances:</p>
+                    
+                    <h3>Service Providers</h3>
+                    <p>We may share information with third-party vendors, consultants, and other service providers who need access to such information to carry out work on our behalf.</p>
+                    
+                    <h3>Business Transfers</h3>
+                    <p>If we are involved in a merger, acquisition, or sale of all or a portion of our assets, your information may be transferred as part of that transaction.</p>
+                    
+                    <h3>Legal Requirements</h3>
+                    <p>We may disclose your information if required to do so by law or in response to valid requests by public authorities.</p>
+                    
+                    <h3>With Your Consent</h3>
+                    <p>We may share your information with third parties when we have your explicit consent to do so.</p>
+                </div>
+                
+                <div class="policy-section" id="cookies">
+                    <h2>4. Cookies and Tracking Technologies</h2>
+                    <p>We use cookies and similar tracking technologies to track activity on our website and hold certain information.</p>
+                    
+                    <h3>Types of Cookies We Use</h3>
+                    <ul>
+                        <li><strong>Essential Cookies:</strong> Necessary for the website to function properly.</li>
+                        <li><strong>Performance Cookies:</strong> Help us understand how visitors interact with our website.</li>
+                        <li><strong>Functionality Cookies:</strong> Allow the website to remember choices you make.</li>
+                        <li><strong>Targeting Cookies:</strong> Used to deliver ads relevant to you.</li>
+                    </ul>
+                    
+                    <p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our service.</p>
+                </div>
+                
+                <div class="policy-section" id="data-security">
+                    <h2>5. Data Security</h2>
+                    <p>We implement appropriate technical and organizational security measures designed to protect your personal information against accidental or unlawful destruction, loss, alteration, unauthorized disclosure, or access.</p>
+                    
+                    <h3>Security Measures Include:</h3>
+                    <ul>
+                        <li>Encryption of data in transit and at rest</li>
+                        <li>Regular security assessments and testing</li>
+                        <li>Access controls and authentication mechanisms</li>
+                        <li>Secure network infrastructure</li>
+                        <li>Employee training on data protection</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        <p><strong>Important:</strong> While we strive to use commercially acceptable means to protect your personal information, no method of transmission over the Internet or electronic storage is 100% secure. We cannot guarantee absolute security.</p>
+                    </div>
+                </div>
+                
+                <div class="policy-section" id="user-rights">
+                    <h2>6. Your Rights and Choices</h2>
+                    <p>Depending on your location, you may have certain rights regarding your personal information:</p>
+                    
+                    <ul>
+                        <li><strong>Access:</strong> You can request copies of your personal information.</li>
+                        <li><strong>Rectification:</strong> You can request that we correct any information you believe is inaccurate.</li>
+                        <li><strong>Erasure:</strong> You can request that we erase your personal information, under certain conditions.</li>
+                        <li><strong>Restriction:</strong> You can request that we restrict the processing of your personal information.</li>
+                        <li><strong>Objection:</strong> You can object to our processing of your personal information.</li>
+                        <li><strong>Data Portability:</strong> You can request that we transfer the data we have collected to another organization, or directly to you.</li>
+                    </ul>
+                    
+                    <p>To exercise any of these rights, please contact us using the information provided in the "Contact Us" section.</p>
+                </div>
+                
+                <div class="policy-section" id="children-privacy">
+                    <h2>7. Children's Privacy</h2>
+                    <p>Our services are not directed to individuals under the age of 16. We do not knowingly collect personal information from children under 16.</p>
+                    
+                    <p>If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us. If we become aware that we have collected personal information from a child under age 16 without verification of parental consent, we take steps to remove that information from our servers.</p>
+                </div>
+                
+                <div class="policy-section" id="policy-changes">
+                    <h2>8. Changes to This Privacy Policy</h2>
+                    <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+                    
+                    <p>We will let you know via email and/or a prominent notice on our service, prior to the change becoming effective and update the "last updated" date at the bottom of this Privacy Policy.</p>
+                    
+                    <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
+                </div>
+                
+                <div class="policy-section" id="contact">
+                    <h2>9. Contact Us</h2>
+                    <p>If you have any questions about this Privacy Policy, please contact us:</p>
+                    
+                    <div class="contact-info">
+                        <h3>ShopEasy Privacy Team</h3>
+                        <p>Email: info@shopeasy.com</p>
+                        <p>Phone: +94 234 567 8900</p>
+                        <p>23 Street, colombo, Sri Lanka </p>
+                    </div>
+                </div>
+                
+                <a href="/" class="back-btn" style="background-color: #667eea;">← Back to Home</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 ShopEasy. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for table of contents links
+        document.querySelectorAll('.toc a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Toggle switch functionality
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const optionName = this.closest('.consent-option').querySelector('h4').textContent;
+                const status = this.checked ? 'enabled' : 'disabled';
+                
+                // In a real implementation, this would save the preference to the server
+                console.log(`${optionName}: ${status}`);
+                
+                // Show a confirmation message (optional)
+                const message = document.createElement('div');
+                message.textContent = `Your preference for "${optionName}" has been ${status}.`;
+                message.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: #667eea;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 1000;
+                    max-width: 300px;
+                `;
+                
+                document.body.appendChild(message);
+                
+                setTimeout(() => {
+                    message.remove();
+                }, 3000);
+            });
+        });
+
+    </script>
+</body>
+</html>

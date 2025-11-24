@@ -1072,6 +1072,65 @@ def admin_messages():
                          unread_count=unread_count,
                          show_deleted=show_deleted)
 
+
+
+
+
+
+
+@app.route('/chatbot')
+def chatbot():
+    return render_template('footer/chatbot.html')
+
+@app.route('/chatbot_api', methods=['POST'])
+def chatbot_api():
+    user_msg = request.json['message'].lower()
+
+    # simple chatbot reply rules
+    if "hello" in user_msg:
+        reply = "Hello! How can I help you today?"
+    elif "order" in user_msg:
+        reply = "You can view your orders in your Profile > My Orders."
+    elif "product" in user_msg:
+        reply = "We have many products! What type are you looking for?"
+    elif "contact" in user_msg:
+        reply = "You can contact us using the Contact Us page."
+    else:
+        reply = "Sorry, I didn't understand. Try asking about orders, products, or help."
+
+    return {"reply": reply}
+
+
+
+@app.route('/shipping')
+def shipping():
+    return render_template('footer/shipping.html')
+
+@app.route('/returns')
+def returns():
+    return render_template('footer/returns.html')
+
+@app.route('/size-guide')
+def size_guide():
+    return render_template('footer/size_guide.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('footer/privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('footer/terms.html')
+
+
+
+
+
+
+
+
+
+
 # ---------------------
 # RUN APP
 # ---------------------

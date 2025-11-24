@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot - ShopEasy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #304abd 0%, #5f3689 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-btn:active {
+            transform: translateY(-50%) scale(0.98);
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-box::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-box::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 75%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bot {
+            background: white;
+            color: #333;
+            align-self: flex-start;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            max-width: 75px;
+            align-self: flex-start;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state small {
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .suggestion-chip {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-chip:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 500px;
+            }
+
+            .msg {
+                max-width: 85%;
+            }
+
+            .chat-header h2 {
+                font-size: 20px;
+            }
+
+            button {
+                padding: 14px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <button class="back-btn" onclick="goHome()" aria-label="Go back to index.html">
+            ← Back to Home
+        </button>
+        <h2>ShopEasy Assistant 🤖</h2>
+    </div>
+
+    <div id="chatBox" class="chat-box">
+        <div class="empty-state">
+            <div class="empty-state-icon">💬</div>
+            <p>Welcome to ShopEasy!</p>
+            <small>Start a conversation to get assistance</small>
+            <div class="suggestions">
+                <div class="suggestion-chip" onclick="sendSuggestion('What products do you have?')">What products do you have?</div>
+                <div class="suggestion-chip" onclick="sendSuggestion('Track my order')">Track my order</div>
+                <div class="suggestion-chip" onclick="sendSuggestion('Return policy')">Return policy</div>
+                <div class="suggestion-chip" onclick="sendSuggestion('Customer support')">Customer support</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input-container">
+        <input 
+            id="userInput" 
+            type="text" 
+            placeholder="Type your message..." 
+            onkeypress="handleKeyPress(event)"
+            aria-label="Chat message input"
+        />
+        <button id="sendBtn" onclick="sendMsg()" aria-label="Send message">Send</button>
+    </div>
+</div>
+
+<script>
+    let isFirstMessage = true;
+
+    // Knowledge base for the chatbot
+    const knowledgeBase = {
+        // Product information
+        products: {
+            keywords: ['product', 'products', 'what do you sell', 'catalog', 'items', 'available', 'buy', 'shop'],
+            response: "We offer a wide range of products including Electronics, Fashion, Home & Garden, Beauty, Sports, and Books. You can browse our catalog by category on the dashboard. What are you looking for today?"
+        },
+        
+        // Order tracking
+        tracking: {
+            keywords: ['track', 'order', 'shipment', 'delivery', 'where is my', 'status'],
+            response: "To track your order, please go to 'My Orders' section on your dashboard. You'll need your order number. Orders typically arrive within 3-5 business days. Would you like me to help you find your order number?"
+        },
+        
+        // Returns and refunds
+        returns: {
+            keywords: ['return', 'refund', 'exchange', 'money back', 'cancel'],
+            response: "Our return policy allows returns within 30 days of purchase. Items must be unused and in original packaging. To start a return, go to 'My Orders' and select 'Return Item'. Refunds are processed within 5-7 business days. Need help with a specific order?"
+        },
+        
+        // Payment information
+        payment: {
+            keywords: ['payment', 'pay', 'credit card', 'debit', 'paypal', 'checkout'],
+            response: "We accept all major credit cards, debit cards, PayPal, and digital wallets. All transactions are secured with 256-bit encryption. Your payment information is never stored on our servers."
+        },
+        
+        // Shipping information
+        shipping: {
+            keywords: ['shipping', 'ship', 'delivery', 'free shipping', 'how long'],
+            response: "We offer free standard shipping on orders over $50. Standard shipping takes 3-5 business days, Express shipping takes 1-2 business days (additional fee applies). International shipping is available to most countries."
+        },
+        
+        // Account help
+        account: {
+            keywords: ['account', 'profile', 'password', 'login', 'sign in', 'register', 'email'],
+            response: "For account issues, you can reset your password using the 'Forgot Password' link on the login page. To update your profile information, go to 'Account Settings' in your dashboard. Need help with something specific?"
+        },
+        
+        // Customer support
+        support: {
+            keywords: ['support', 'help', 'contact', 'customer service', 'talk to human', 'representative'],
+            response: "Our customer support team is available 24/7! You can reach us at support@shopeasy.com or call 1-800-SHOP-EASY. Live chat is also available on our website. How else can I assist you today?"
+        },
+        
+        // Discounts and promotions
+        discounts: {
+            keywords: ['discount', 'coupon', 'promo', 'sale', 'deal', 'offer', 'code'],
+            response: "Check out our 'Deals' section for current promotions! First-time customers get 15% off with code WELCOME15. Sign up for our newsletter to receive exclusive offers and early access to sales."
+        },
+        
+        // Greetings
+        greetings: {
+            keywords: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings'],
+            response: "Hello! Welcome to ShopEasy. I'm here to help you with products, orders, returns, and any questions you have. How can I assist you today?"
+        },
+        
+        // Thanks
+        thanks: {
+            keywords: ['thank', 'thanks', 'appreciate', 'helpful'],
+            response: "You're very welcome! Is there anything else I can help you with today? 😊"
+        }
+    };
+
+    function goHome() {
+        window.location.href = '/';
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendMsg();
+        }
+    }
+
+    function sendSuggestion(message) {
+        document.getElementById("userInput").value = message;
+        sendMsg();
+    }
+
+    function getSmartResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        // Check each knowledge category
+        for (const [key, data] of Object.entries(knowledgeBase)) {
+            for (const keyword of data.keywords) {
+                if (lowerMessage.includes(keyword)) {
+                    return data.response;
+                }
+            }
+        }
+        
+        // Default response if no match found
+        return "I'm here to help! I can assist you with product information, order tracking, returns, shipping, payments, and account questions. What would you like to know more about?";
+    }
+
+    function sendMsg() {
+        let userInput = document.getElementById("userInput");
+        let message = userInput.value.trim();
+        let sendBtn = document.getElementById("sendBtn");
+
+        if (message === "") return;
+
+        // Remove empty state on first message
+        if (isFirstMessage) {
+            document.querySelector('.empty-state')?.remove();
+            isFirstMessage = false;
+        }
+
+        addMessage(message, "user");
+        userInput.value = "";
+        
+        // Disable input while processing
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+
+        // Show typing indicator
+        showTypingIndicator();
+
+        // Try to get smart response first
+        const smartResponse = getSmartResponse(message);
+        
+        // Simulate API call with smart response or use actual API
+        setTimeout(() => {
+            hideTypingIndicator();
+            addMessage(smartResponse, "bot");
+            
+            // Re-enable input
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+            userInput.focus();
+        }, 800);
+
+        // Uncomment below to use actual API instead of smart responses
+        /*
+        fetch("/chatbot_api", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({message: message})
+        })
+        .then(res => res.json())
+        .then(data => {
+            hideTypingIndicator();
+            addMessage(data.reply, "bot");
+        })
+        .catch(error => {
+            hideTypingIndicator();
+            addMessage("Sorry, I'm having trouble connecting. Please try again.", "bot");
+            console.error("Error:", error);
+        })
+        .finally(() => {
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+            userInput.focus();
+        });
+        */
+    }
+
+    function addMessage(text, sender) {
+        let chatBox = document.getElementById("chatBox");
+        let msgDiv = document.createElement("div");
+        msgDiv.className = "msg " + sender;
+        msgDiv.textContent = text;
+        chatBox.appendChild(msgDiv);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        let chatBox = document.getElementById("chatBox");
+        let typingDiv = document.createElement("div");
+        typingDiv.className = "typing-indicator active";
+        typingDiv.id = "typingIndicator";
+        typingDiv.innerHTML = '<span></span><span></span><span></span>';
+        chatBox.appendChild(typingDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+        let typingIndicator = document.getElementById("typingIndicator");
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+
+    // Focus input on load
+    window.onload = function() {
+        document.getElementById("userInput").focus();
+    };
+</script>
+
+</body>
+</html>

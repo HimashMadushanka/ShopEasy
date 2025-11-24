@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Returns & Refunds - ShopEasy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #304abd 0%, #5f3689 100%);
+            color: #333;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: white;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .policy-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            padding: 30px;
+        }
+
+        .policy-section {
+            margin-bottom: 30px;
+        }
+
+        .policy-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .policy-section p {
+            margin-bottom: 15px;
+        }
+
+        .policy-section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .policy-section li {
+            margin-bottom: 8px;
+        }
+
+        .highlight-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .contact-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .contact-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">   
+        <div class="header">
+            <h1>Returns & Refunds</h1>
+            <p>Hassle-free returns and quick refunds for your peace of mind</p>
+        </div>
+        
+        <div class="policy-container">
+            <div class="policy-section">
+                <h2>Return Policy</h2>
+                <p>We want you to be completely satisfied with your ShopEasy purchase. If you're not happy with your order, we're here to help.</p>
+                
+                <div class="highlight-box">
+                    <p><strong>30-Day Return Policy:</strong> You have 30 days from the delivery date to return most items for a full refund.</p>
+                </div>
+                
+                <h3>Return Conditions</h3>
+                <ul>
+                    <li>Items must be unused and in original condition</li>
+                    <li>All original tags and packaging must be attached</li>
+                    <li>Items must be in resalable condition</li>
+                    <li>Return shipping label must be used (if provided)</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2>How to Return an Item</h2>
+                <p>Follow these simple steps to return your item:</p>
+                
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Start Your Return</h3>
+                            <p>Log in to your account and visit the "Order History" section. Select the item you wish to return.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Print Return Label</h3>
+                            <p>Print the prepaid return shipping label that will be emailed to you after initiating the return.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Package Your Item</h3>
+                            <p>Securely package the item in its original packaging and attach the return label to the outside.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Drop Off Package</h3>
+                            <p>Drop off your package at any authorized shipping location or schedule a pickup.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="policy-section">
+                <h2>Refund Information</h2>
+                <p>Once we receive your return, we'll process your refund quickly:</p>
+                
+                <ul>
+                    <li><strong>Processing Time:</strong> 3-5 business days after we receive your return</li>
+                    <li><strong>Refund Method:</strong> Refunds are issued to your original payment method</li>
+                    <li><strong>Shipping Costs:</strong> Original shipping costs are non-refundable</li>
+                    <li><strong>Return Shipping:</strong> Free for defective or incorrect items</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <p><strong>Note:</strong> It may take 5-10 business days for the refund to appear in your account, depending on your bank or credit card company.</p>
+                </div>
+            </div>
+            
+            <div class="policy-section">
+                <h2>Exchanges</h2>
+                <p>Need a different size or color? We offer easy exchanges:</p>
+                
+                <ul>
+                    <li>Exchanges are subject to product availability</li>
+                    <li>Contact us within 14 days of delivery to request an exchange</li>
+                    <li>You may be asked to return the original item first</li>
+                    <li>We'll ship the replacement item once we receive your return</li>
+                </ul>
+            </div>
+            
+
+            
+            <div class="contact-box">
+                <h3>Need Help With Your Return?</h3>
+                <p>Our customer service team is here to assist you:</p>
+                <p>Email: info@shopeasy.com | Phone: +94 234 567 8900</p>
+
+            </div> <br>
+                <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a></div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 ShopEasy. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
