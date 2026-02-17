@@ -99,7 +99,7 @@ Built using **Flask** for the backend, **HTML/CSS/JS** for frontend, and **MySQL
 <img width="1917" height="918" alt="Capture13" src="https://github.com/user-attachments/assets/5a2651d9-3a88-494c-bfaf-85130bbcbeb1" />
 <img width="1916" height="917" alt="Capture14" src="https://github.com/user-attachments/assets/8d7d88ee-48fb-4ee4-a9e3-581f4182e464" />
 <img width="1917" height="917" alt="Capture16" src="https://github.com/user-attachments/assets/34a94844-514d-4c5d-a431-77268ada6b62" />
-<img width="1905" height="921" alt="Capture17" src="https://github.com/user-attachments/assets/54eaa522-529d-4b49-8807-44df5803dec6" 
+<img width="1905" height="921" alt="Capture17" src="https://github.com/user-attachments/assets/54eaa522-529d-4b49-8807-44df5803dec6" />
 
 ## Running the 
 
