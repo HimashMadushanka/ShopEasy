@@ -107,6 +107,7 @@ Built using **Flask** for the backend, **HTML/CSS/JS** for frontend, and **MySQL
 
 - python app.py
 
+---
 
 ## 🔑 Admin Panel
 
