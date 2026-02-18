@@ -111,7 +111,7 @@ Built using **Flask** for the backend, **HTML/CSS/JS** for frontend, and **MySQL
 
 ## 🔑 Admin Panel
 
-Admin login page: http://127.0.0.1:5000/admin_login
+Admin login page: http://127.0.0.1:5000/
 
 Features: Manage products, categories, users, orders, messages, dashboard analytics.
 
