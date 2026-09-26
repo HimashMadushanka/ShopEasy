@@ -21,9 +21,8 @@ app.config["UPLOAD_FOLDER"] = "static/uploads"
 # Stripe keys
 stripe.api_key = "sk_test_51SVHsEFpFFIttRBhc8PBtemSSWBhd5MU9QvFd4uIGbBfjRAb2Ofd3QCAZYKJehgvm9N6GMGnz5Kl4qIvF4sF4pA800aLpUZawZ"
 
-# ---------------------
+
 # DATABASE CONNECTION
-# ---------------------
 def db_connect():
     conn = mysql.connector.connect(
         host="localhost",
@@ -33,18 +32,18 @@ def db_connect():
     )
     return conn
 
-# ---------------------
+
+
 # HOME ROUTE
-# ---------------------
 @app.route("/")
 def home():
     if "user" in session:
         return render_template("index.html", username=session["user"])
     return render_template("index.html", username=None)
 
-# ---------------------
+
+
 # REGISTER ROUTE
-# ---------------------
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -74,9 +73,8 @@ def register():
 
     return render_template("register.html")
 
-# ---------------------
-# LOGIN ROUTE (UPDATED WITH ADMIN CHECK)
-# ---------------------
+
+# LOGIN ROUTE
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -104,9 +102,8 @@ def login():
 
     return render_template("login.html")
 
-# ---------------------
+
 # LOGOUT ROUTE
-# ---------------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
@@ -115,16 +112,16 @@ def logout():
     flash("You have been logged out.")
     return redirect("/")
 
-# ---------------------
+
+
 # ABOUT ROUTE
-# ---------------------
 @app.route("/about")
 def about():
     return render_template("about.html")
 
-# ---------------------
+
+
 # CATEGORY PAGE
-# ---------------------
 @app.route("/categories")
 def categories_page():
     conn = db_connect()
@@ -145,9 +142,9 @@ def products_by_category(cat_id):
     conn.close()
     return render_template("category_products.html", category=category, products=products)
 
-# ---------------------
+
+
 # CONTACT PAGE
-# ---------------------
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
@@ -169,9 +166,8 @@ def contact():
 
     return render_template("contact.html")
 
-# ---------------------
+
 # PROFILE PAGE
-# ---------------------
 @app.route("/profile")
 def profile():
     if "user" not in session:
@@ -282,9 +278,8 @@ def upload_profile_pic():
 
     return jsonify({"message": "Profile picture updated!"})
 
-# ---------------------
+
 # Add to Cart Route
-# ---------------------
 @app.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
     if "user" not in session:
@@ -321,9 +316,8 @@ def add_to_cart():
     flash("Item added to cart!")
     return redirect("/cart")
 
-# ---------------------
+
 # View Cart Route
-# ---------------------
 @app.route("/cart")
 def cart():
     if "user" not in session:
@@ -340,9 +334,8 @@ def cart():
     total = sum(item["price"] * item["quantity"] for item in items)
     return render_template("cart.html", items=items, total=total)
 
-# ---------------------
+
 # Remove Item From Cart
-# ---------------------
 @app.route("/remove/<int:id>")
 def remove_item(id):
     conn = db_connect()
@@ -353,16 +346,14 @@ def remove_item(id):
     flash("Item removed!")
     return redirect("/cart")
 
-# ---------------------
+
 # PRODUCTS PAGE
-# ---------------------
 @app.route("/products")
 def products_page():
     return render_template("products.html")
 
-# ---------------------
+
 # API PRODUCTS
-# ---------------------
 @app.route("/api/products")
 def api_products():
     conn = db_connect()
@@ -372,9 +363,8 @@ def api_products():
     conn.close()
     return jsonify(products)
 
-# ---------------------
+
 # CHECKOUT ROUTE (WITH STRIPE & CASH)
-# ---------------------
 @app.route("/checkout", methods=["GET", "POST"])
 def checkout():
     if "user" not in session:
@@ -424,17 +414,16 @@ def checkout():
     conn.close()
     return render_template("checkout.html", items=items, total=total/100)
 
-# ---------------------
+
+
 # Payment Success Route
-# ---------------------
 @app.route("/payment-success")
 def payment_success():
     flash("Payment successful! Your order is confirmed.")
     return redirect("/")
 
-# ---------------------
+
 # ADMIN REGISTRATION
-# ---------------------
 @app.route("/admin/register", methods=["GET", "POST"])
 def admin_register():
     if request.method == "POST":
@@ -459,9 +448,9 @@ def admin_register():
             conn.close()
     return render_template("admin_register.html")
 
-# ---------------------
+
+
 # ADMIN LOGIN
-# ---------------------
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
@@ -484,9 +473,9 @@ def admin_login():
             return redirect("/admin/login")
     return render_template("admin_login.html")
 
-# ---------------------
+
+
 # LOGIN REQUIRED DECORATOR
-# ---------------------
 def admin_login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -496,17 +485,15 @@ def admin_login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# ---------------------
+
 # DASHBOARD
-# ---------------------
 @app.route("/admin/dashboard")
 @admin_login_required
 def admin_dashboard():
     return render_template("admin_dashboard.html", username=session["admin_username"])
 
-# ---------------------
+
 # LOGOUT
-# ---------------------
 @app.route("/admin/logout")
 def admin_logout():
     session.clear()
@@ -869,15 +856,15 @@ def admin_update_password():
     flash("Password updated successfully!", "success")
     return redirect("/admin/login")
 
-# ---------------------
+
+
 # Forgot Password Page
-# ---------------------
 @app.route("/forgot-password", methods=["GET"])
 def forgot_password():
     return render_template("forgot_password.html")
-# ---------------------
+
+
 #  Handle Email Submit
-# ---------------------
 @app.route("/forgot-password", methods=["POST"])
 def forgot_password_post():
     email = request.form["email"]
@@ -906,9 +893,9 @@ def forgot_password_post():
 
     flash(f"Reset Link (copy this): {reset_link}", "info")
     return redirect("/forgot-password")
-# ---------------------
+
+
 # Show Reset Password Page
-# ---------------------
 @app.route("/reset-password/<token>")
 def reset_password(token):
     conn = db_connect()
@@ -924,9 +911,9 @@ def reset_password(token):
         return "Reset link expired!"
 
     return render_template("reset_password.html", token=token)
-# ---------------------
+
+
 # Update Password
-# ---------------------
 @app.route("/update-password", methods=["POST"])
 def update_password():
     token = request.form["token"]
@@ -952,9 +939,8 @@ def update_password():
     flash("Password reset successful! Please login.", "success")
     return redirect("/login")
 
-# ---------------------
+
 # MARK MESSAGE AS READ
-# ---------------------
 @app.route("/admin/messages/read/<int:message_id>")
 @admin_login_required
 def mark_message_read(message_id):
@@ -966,9 +952,8 @@ def mark_message_read(message_id):
     flash("Message marked as read!", "success")
     return redirect("/admin/messages")
 
-# ---------------------
+
 # MARK MESSAGE AS UNREAD
-# ---------------------
 @app.route("/admin/messages/unread/<int:message_id>")
 @admin_login_required
 def mark_message_unread(message_id):
@@ -980,9 +965,9 @@ def mark_message_unread(message_id):
     flash("Message marked as unread!", "success")
     return redirect("/admin/messages")
 
-# ---------------------
+
 # DELETE MESSAGE (SOFT DELETE)
-# ---------------------
+
 @app.route("/admin/messages/delete/<int:message_id>")
 @admin_login_required
 def delete_message(message_id):
@@ -994,9 +979,8 @@ def delete_message(message_id):
     flash("Message deleted successfully!", "success")
     return redirect("/admin/messages")
 
-# ---------------------
 # PERMANENTLY DELETE MESSAGE
-# ---------------------
+
 @app.route("/admin/messages/permanent-delete/<int:message_id>")
 @admin_login_required
 def permanent_delete_message(message_id):
@@ -1008,9 +992,8 @@ def permanent_delete_message(message_id):
     flash("Message permanently deleted!", "success")
     return redirect("/admin/messages")
 
-# ---------------------
 # RESTORE DELETED MESSAGE
-# ---------------------
+
 @app.route("/admin/messages/restore/<int:message_id>")
 @admin_login_required
 def restore_message(message_id):
@@ -1022,9 +1005,8 @@ def restore_message(message_id):
     flash("Message restored!", "success")
     return redirect("/admin/messages")
 
-# ---------------------
 # VIEW SINGLE MESSAGE
-# ---------------------
+
 @app.route("/admin/messages/view/<int:message_id>")
 @admin_login_required
 def view_message(message_id):
@@ -1124,16 +1106,7 @@ def terms():
 
 
 
-
-
-
-
-
-
-
-# ---------------------
 # RUN APP
-# ---------------------
 if __name__ == "__main__":
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
     app.run(debug=True)
